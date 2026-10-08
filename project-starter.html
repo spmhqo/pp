@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Starter</title>
+    <link rel="icon" href="spm.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf9f6;
+            --surface-color: #ffffff;
+            --border-color: #e2dfdc;
+            --border-focus: #706b63;
+            --text-main: #2c2a29;
+            --text-muted: #6e6963;
+            --accent: #1a1918;
+            --accent-hover: #383532;
+            --success: #2e7d32;
+            --header-color: #4338ca;
+            --font-serif: 'Newsreader', serif;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 40px 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .document-container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 48px 40px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
+        }
+
+        .doc-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .doc-title {
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--header-color);
+            margin-bottom: 8px;
+        }
+
+        .doc-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .section-heading {
+            font-family: var(--font-serif);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 36px 0 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .doc-input {
+            flex: 1;
+            width: 100%;
+            min-height: 88px;
+            padding: 12px 16px;
+            resize: vertical;
+            font: 0.95rem var(--font-sans);
+            color: var(--text-main);
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .doc-input:focus {
+            outline: none;
+            border-color: var(--border-focus);
+            background: var(--surface-color);
+            box-shadow: 0 0 0 3px rgba(112, 107, 99, 0.1);
+        }
+
+        .reset-btn,
+        .copy-btn {
+            border: 0;
+            border-radius: 6px;
+            padding: 10px 16px;
+            font: 500 0.85rem var(--font-sans);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .reset-btn {
+            color: var(--text-main);
+            background: #ece9e5;
+        }
+
+        .reset-btn:hover {
+            background: #ddd8d2;
+        }
+
+        .output-card {
+            margin-top: 24px;
+            padding: 24px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .output-header {
+            margin-bottom: 12px;
+        }
+
+        .output-title {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .prompt-preview {
+            width: 100%;
+            min-height: 170px;
+            margin-bottom: 16px;
+            padding: 16px;
+            resize: vertical;
+            font: 0.9rem/1.5 var(--font-sans);
+            color: var(--text-main);
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            white-space: pre-wrap;
+        }
+
+        .copy-btn {
+            color: #ffffff;
+            background: var(--accent);
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .copy-btn.copied {
+            background: var(--success);
+        }
+
+        .doc-footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 12px 8px;
+            }
+
+            .document-container {
+                padding: 24px 16px;
+            }
+
+            .doc-title {
+                font-size: 1.8rem;
+            }
+
+            .input-row {
+                flex-direction: column;
+            }
+
+            .reset-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="document-container">
+        <header class="doc-header">
+            <h1 class="doc-title">Project Starter</h1>
+            <p class="doc-subtitle">(Gateway Problem, Specific Issues, and Paid Product Idea)</p>
+        </header>
+
+        <section aria-labelledby="inputs-heading">
+            <h2 id="inputs-heading" class="section-heading">1. Variables &amp; Inputs</h2>
+
+            <div class="input-group">
+                <label class="input-label" for="audienceInput">[description of the targeted audience]</label>
+                <div class="input-row">
+                    <textarea id="audienceInput" class="doc-input" oninput="updatePrompts()"></textarea>
+                    <button class="reset-btn" type="button" onclick="resetInput('audienceInput')">Reset</button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label" for="desireInput">[desire of the targeted audience]</label>
+                <div class="input-row">
+                    <textarea id="desireInput" class="doc-input" oninput="updatePrompts()"></textarea>
+                    <button class="reset-btn" type="button" onclick="resetInput('desireInput')">Reset</button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label" for="gatewayInput">[Gateway Problem]</label>
+                <div class="input-row">
+                    <textarea id="gatewayInput" class="doc-input" oninput="updatePrompts()"></textarea>
+                    <button class="reset-btn" type="button" onclick="resetInput('gatewayInput')">Reset</button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label" for="issuesInput">[Specific, Non-overlapping Issues]</label>
+                <div class="input-row">
+                    <textarea id="issuesInput" class="doc-input" oninput="updatePrompts()"></textarea>
+                    <button class="reset-btn" type="button" onclick="resetInput('issuesInput')">Reset</button>
+                </div>
+            </div>
+        </section>
+
+        <section aria-labelledby="output-heading">
+            <h2 id="output-heading" class="section-heading">2. Generated Output Prompts</h2>
+
+            <article class="output-card">
+                <div class="output-header"><span class="output-title">Prompt #1</span></div>
+                <textarea id="promptOutput1" class="prompt-preview" readonly></textarea>
+                <button class="copy-btn" type="button" onclick="copyPrompt('promptOutput1', this)">Copy to Clipboard</button>
+            </article>
+
+            <article class="output-card">
+                <div class="output-header"><span class="output-title">Prompt #2</span></div>
+                <textarea id="promptOutput2" class="prompt-preview" readonly></textarea>
+                <button class="copy-btn" type="button" onclick="copyPrompt('promptOutput2', this)">Copy to Clipboard</button>
+            </article>
+
+            <article class="output-card">
+                <div class="output-header"><span class="output-title">Prompt #3</span></div>
+                <textarea id="promptOutput3" class="prompt-preview" readonly></textarea>
+                <button class="copy-btn" type="button" onclick="copyPrompt('promptOutput3', this)">Copy to Clipboard</button>
+            </article>
+        </section>
+
+        <footer class="doc-footer">
+            Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.
+        </footer>
+    </main>
+
+    <script>
+        const promptTemplate1 = `Identify the "Gateway Problem" faced by people who are [description of the targeted audience] and want to [desire of the targeted audience].`;
+
+        const promptTemplate2 = `Based on the "Gateway Problem" below, identify the specific, non-overlapping issues experienced by people who are [description of the targeted audience] and want to [desire of the targeted audience].
+
+Requirements:
+1. Provide the issues as a numbered list.
+2. Each issue must be specific and clearly distinct from every other issue.
+3. Do not repeat, rephrase, or restate the Gateway Problem as an issue.
+4. Each issue must represent a specific difficulty, obstacle, frustration, uncertainty, or concern experienced by the target audience.
+5. Phrase every issue from the target audience's perspective, focusing on what they personally experience, struggle with, or cannot figure out.
+6. Do not combine multiple distinct issues into one item.
+7. Avoid generic or overly broad statements.
+
+GATEWAY PROBLEM
+[Gateway Problem]`;
+
+        const promptTemplate3 = `Based on the "Specific, Non-overlapping Issues" below, identify the SINGLE issue with the strongest potential to become a high-demand, highly valuable PAID PRODUCT for people who are [description of the targeted audience] and want to [desire of the targeted audience].
+
+Evaluate each issue based on:
+1. The seriousness and urgency of the problem.
+2. How strongly the target audience wants the problem solved.
+3. How common the problem is among the target audience.
+4. The likelihood that the target audience would be willing to pay for an effective solution.
+5. The potential to create a clear, practical, and deliverable paid product that solves the issue.
+6. The potential for strong and sustained market demand.
+
+Do not simply choose the most common issue. Select the ONE issue where problem intensity, desire for a solution, willingness to pay, market demand, and paid-product potential overlap most strongly.
+
+Do not select multiple issues or provide alternative choices. Make a clear final decision.
+
+Return:
+1. The SINGLE selected issue
+2. Why this issue has the strongest paid-product potential
+3. What the target audience is ultimately willing to pay to solve
+4. The ideal type of PAID PRODUCT to solve this issue
+5. The core transformation or outcome the product should deliver
+
+SPECIFIC, NON-OVERLAPPING ISSUES
+[Specific, Non-overlapping Issues]`;
+
+        function getValue(inputId, placeholder) {
+            return document.getElementById(inputId).value || placeholder;
+        }
+
+        function replaceAudienceAndDesire(template, audience, desire) {
+            return template
+                .replaceAll('[description of the targeted audience]', audience)
+                .replaceAll('[desire of the targeted audience]', desire);
+        }
+
+        function updatePrompts() {
+            const audience = getValue('audienceInput', '[description of the targeted audience]');
+            const desire = getValue('desireInput', '[desire of the targeted audience]');
+            const gatewayProblem = getValue('gatewayInput', '[Gateway Problem]');
+            const issues = getValue('issuesInput', '[Specific, Non-overlapping Issues]');
+
+            document.getElementById('promptOutput1').value =
+                replaceAudienceAndDesire(promptTemplate1, audience, desire);
+
+            document.getElementById('promptOutput2').value =
+                replaceAudienceAndDesire(promptTemplate2, audience, desire)
+                    .replace('[Gateway Problem]', gatewayProblem);
+
+            document.getElementById('promptOutput3').value =
+                replaceAudienceAndDesire(promptTemplate3, audience, desire)
+                    .replace('[Specific, Non-overlapping Issues]', issues);
+        }
+
+        function resetInput(inputId) {
+            document.getElementById(inputId).value = '';
+            updatePrompts();
+        }
+
+        async function copyPrompt(outputId, button) {
+            const output = document.getElementById(outputId);
+
+            try {
+                await navigator.clipboard.writeText(output.value);
+            } catch (error) {
+                output.select();
+                document.execCommand('copy');
+                window.getSelection().removeAllRanges();
+            }
+
+            const originalText = button.textContent;
+            button.textContent = '✓ Copied!';
+            button.classList.add('copied');
+
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.classList.remove('copied');
+            }, 2000);
+        }
+
+        updatePrompts();
+    </script>
+</body>
+</html>

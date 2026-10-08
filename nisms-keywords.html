@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NISMS Keywords</title>
+    <link rel="icon" href="spm.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg:#faf9f6; --surface:#fff; --border:#e2dfdc; --focus:#706b63; --text:#2c2a29; --muted:#6e6963; --accent:#1a1918; --hover:#383532; --success:#2e7d32; --header:#4338ca; --serif:'Newsreader',serif; --sans:'Plus Jakarta Sans',sans-serif; }
+        *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+        body { padding:40px 20px; font-family:var(--sans); color:var(--text); background:var(--bg); line-height:1.6; -webkit-font-smoothing:antialiased; }
+        .document-container { max-width:900px; margin:auto; padding:48px 40px; background:var(--surface); border:1px solid var(--border); border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,.02); }
+        .doc-header { margin-bottom:40px; padding-bottom:30px; text-align:center; border-bottom:1px solid var(--border); }
+        .doc-title { margin-bottom:8px; font:600 2.2rem var(--serif); letter-spacing:-.02em; color:var(--header); }
+        .doc-subtitle { font-size:.95rem; color:var(--muted); }
+        .section-heading { margin:36px 0 16px; padding-bottom:8px; font:600 1.3rem var(--serif); color:var(--accent); border-bottom:1px dashed var(--border); }
+        .input-group { margin-bottom:20px; }
+        .input-label { display:block; margin-bottom:8px; font-size:.9rem; font-weight:500; }
+        .input-row { display:flex; gap:10px; align-items:flex-start; }
+        .doc-input { flex:1; width:100%; min-height:120px; padding:12px 16px; resize:vertical; font:.95rem var(--sans); color:var(--text); background:var(--bg); border:1px solid var(--border); border-radius:8px; transition:border-color .2s ease,box-shadow .2s ease; }
+        .doc-input:focus { outline:0; border-color:var(--focus); background:var(--surface); box-shadow:0 0 0 3px rgba(112,107,99,.1); }
+        .reset-btn,.copy-btn { padding:10px 16px; font:500 .85rem var(--sans); cursor:pointer; border:0; border-radius:6px; transition:background .2s ease; }
+        .reset-btn { color:var(--text); background:#ece9e5; }
+        .reset-btn:hover { background:#ddd8d2; }
+        .output-card { margin-top:30px; padding:24px; background:var(--bg); border:1px solid var(--border); border-radius:8px; }
+        .output-header { margin-bottom:12px; }
+        .output-title { font:600 1.1rem var(--serif); color:var(--accent); }
+        .prompt-preview { width:100%; min-height:680px; margin-bottom:16px; padding:16px; resize:vertical; font:.9rem/1.5 var(--sans); color:var(--text); background:var(--surface); border:1px solid var(--border); border-radius:6px; white-space:pre-wrap; }
+        .copy-btn { color:#fff; background:var(--accent); }
+        .copy-btn:hover { background:var(--hover); }
+        .copy-btn.copied { background:var(--success); }
+        .doc-footer { margin-top:50px; padding-top:20px; text-align:center; font-size:.85rem; color:var(--muted); border-top:1px solid var(--border); }
+        @media (max-width:640px) { body { padding:12px 8px; } .document-container { padding:24px 16px; } .doc-title { font-size:1.8rem; } .input-row { flex-direction:column; } .reset-btn { width:100%; } }
+    </style>
+</head>
+<body>
+    <main class="document-container">
+        <header class="doc-header">
+            <h1 class="doc-title">NISMS Keywords</h1>
+            <p class="doc-subtitle">(Search Strings for NISMS)</p>
+        </header>
+
+        <section>
+            <h2 class="section-heading">1. Variables &amp; Inputs</h2>
+            <div class="input-group">
+                <label class="input-label" for="contentInput">[CONTENT]</label>
+                <div class="input-row">
+                    <textarea id="contentInput" class="doc-input" oninput="updatePrompt()"></textarea>
+                    <button class="reset-btn" type="button" onclick="resetInput()">Reset</button>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-heading">2. Generated Output Prompt</h2>
+            <article class="output-card">
+                <div class="output-header"><span class="output-title">Prompt 1</span></div>
+                <textarea id="promptOutput" class="prompt-preview" readonly></textarea>
+                <button class="copy-btn" type="button" onclick="copyPrompt(this)">Copy to Clipboard</button>
+            </article>
+        </section>
+
+        <footer class="doc-footer">
+            Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.
+        </footer>
+    </main>
+
+    <script>
+        const promptTemplate = `Review the CONTENT provided below and identify the most relevant TARGETED TOPICS OF DISCUSSION that can be used to find other people's social media posts where they are experiencing a specific problem, difficulty, blockage, frustration, or challenge that the CONTENT can help solve.
+
+CONTENT:
+[CONTENT]
+
+OBJECTIVE:
+
+Convert the CONTENT into a focused list of TARGETED TOPICS OF DISCUSSION for social media prospect research.
+
+A TARGETED TOPIC OF DISCUSSION is ONE specific problem, difficulty, situation, task, or desired outcome that a potential buyer could naturally discuss in their own social media post.
+
+The identified topic must be specific enough to be used as [niche] in these five fixed search strings:
+
+"[niche] help"
+"[niche] stuck"
+"[niche] can't"
+"[niche] hate"
+"[niche] frustrating"
+
+STRICT FILTERS:
+
+1. CONTENT-SUPPORTED
+
+Every TARGETED TOPIC OF DISCUSSION must be directly supported by the CONTENT.
+
+Do not introduce a problem, situation, solution, audience need, or topic that cannot reasonably be derived from the CONTENT.
+
+2. SINGLE ISSUE
+
+Each TARGETED TOPIC OF DISCUSSION must represent ONE problem only.
+
+Do not combine multiple problems, symptoms, tasks, or desired outcomes into one topic.
+
+If a topic contains "and" because it combines two separate problems, split it or reject it.
+
+3. SPECIFIC PROBLEM
+
+Reject broad or generic topics.
+
+Do not use broad niche terms or categories such as:
+
+"freelancing"
+"online business"
+"marketing"
+"content creation"
+"fitness"
+"English speaking"
+
+Instead, identify the specific problem within the broader category.
+
+4. REAL SOCIAL-MEDIA DISCUSSION
+
+The topic must describe something a real person could naturally write about in a social media post because they need help, feel stuck, cannot achieve something, dislike something, or are frustrated by something.
+
+Reject topics that sound like textbook subjects, course modules, SEO keywords, or generic educational categories.
+
+5. PROBLEM-LED, NOT KNOWLEDGE-LED
+
+Prioritize problems people experience over information people may want to learn.
+
+For example, prefer:
+
+"getting the first freelance client"
+
+over:
+
+"freelancing tips"
+
+Prefer:
+
+"speaking English confidently in job interviews"
+
+over:
+
+"English speaking"
+
+6. BUYER RELEVANCE
+
+The topic should represent a meaningful problem that could create a genuine need for a solution.
+
+Do not select topics merely because they are interesting, popular, or educational.
+
+7. CONTENT-SOLUTION FIT
+
+The CONTENT must provide meaningful help for the identified problem.
+
+A topic must not be selected merely because it is loosely related to the CONTENT.
+
+Ask:
+
+"Could someone experiencing this specific problem genuinely benefit from the solution, information, method, or framework provided in the CONTENT?"
+
+If the answer is no or only weakly, reject the topic.
+
+8. SEARCHABILITY
+
+The topic must work naturally when inserted into each of the five fixed search patterns:
+
+"[niche] help"
+"[niche] stuck"
+"[niche] can't"
+"[niche] hate"
+"[niche] frustrating"
+
+Reject topics that produce awkward, excessively long, overly abstract, or unnatural search phrases.
+
+9. NATURAL LANGUAGE
+
+Phrase each topic in the way a potential buyer is likely to describe the problem, not in formal academic, technical, or SEO language.
+
+10. NO INTENT MIXING
+
+Do not combine different search intents into one topic.
+
+For example, do not combine:
+
+"getting clients and increasing prices"
+
+These are separate problems and must be treated separately.
+
+11. NO OVERLAP
+
+Each topic must be meaningfully different from every other topic.
+
+If two topics describe essentially the same underlying problem, merge them into one more precise topic.
+
+Do not create multiple variations of the same problem simply by changing wording.
+
+12. NO SOLUTION IN THE TOPIC
+
+The TARGETED TOPIC OF DISCUSSION should describe the problem or situation, not the solution.
+
+Do not write topics such as:
+
+"using ChatGPT to get clients"
+
+when the underlying discussion topic is:
+
+"struggling to get freelance clients"
+
+The solution belongs in the CONTENT, not in the search topic.
+
+13. NO PRODUCT LANGUAGE
+
+Do not mention products, courses, services, offers, buying, pricing, or commercial solutions inside the TARGETED TOPIC OF DISCUSSION unless that wording is itself essential to the actual problem being discussed.
+
+14. NO ASSUMPTIONS
+
+Do not infer a problem simply because it is common within the niche.
+
+The CONTENT must provide enough evidence for the problem to be identified.
+
+15. DISCUSSION-FIRST TEST
+
+Before accepting a topic, apply this test:
+
+"Could a real person reasonably publish a social media post about this specific issue and use language similar to this topic when asking for help or describing their frustration?"
+
+If not, reject it.
+
+16. FIVE-SEARCH-STRING TEST
+
+Before accepting a topic, mentally test it against all five search patterns.
+
+The topic should have a reasonable chance of producing relevant posts when used with:
+
+help
+stuck
+can't
+hate
+frustrating
+
+If the topic works naturally with only one or two of the five patterns but becomes awkward or meaningless with the others, reject or refine it.
+
+17. PRIORITIZE PROBLEMS OVER TOPICS
+
+When the CONTENT contains both broad subjects and specific problems, always prioritize the specific problems.
+
+18. PRIORITIZE ACTIONABLE PROBLEMS
+
+When multiple valid topics exist, prioritize problems where the CONTENT can provide a practical answer, explanation, framework, method, or actionable solution.
+
+19. MINIMUM SUFFICIENT LIST
+
+Do not generate a long list simply to increase the number of topics.
+
+Return only topics that pass ALL mandatory filters.
+
+If only three topics qualify, return three.
+If only one qualifies, return one.
+Do not manufacture additional topics.
+
+OUTPUT:
+
+First, provide a table with these columns:
+
+TARGETED TOPIC OF DISCUSSION
+SPECIFIC PROBLEM REPRESENTED
+WHY A PERSON MAY DISCUSS THIS ON SOCIAL MEDIA
+HOW THE CONTENT CAN HELP
+
+Then provide:
+
+TOP PRIORITY TARGETED TOPICS
+
+Select the strongest qualifying topics based on:
+
+1. Specificity of the problem
+2. Likelihood of appearing in real social-media discussions
+3. Buyer relevance
+4. Strength of CONTENT-SOLUTION FIT
+5. Searchability using all five fixed search strings
+
+Do not generate the search strings themselves.
+
+Do not generate content ideas, SEO keywords, product ideas, or solutions.
+
+The sole purpose of this task is to identify high-quality TARGETED TOPICS OF DISCUSSION that can be used to find relevant potential buyers' social media posts.`;
+
+        function updatePrompt() {
+            const content = document.getElementById('contentInput').value || '[CONTENT]';
+            document.getElementById('promptOutput').value =
+                promptTemplate.replaceAll('[CONTENT]', content);
+        }
+
+        function resetInput() {
+            document.getElementById('contentInput').value = '';
+            updatePrompt();
+        }
+
+        async function copyPrompt(button) {
+            const output = document.getElementById('promptOutput');
+
+            try {
+                await navigator.clipboard.writeText(output.value);
+            } catch (error) {
+                output.select();
+                document.execCommand('copy');
+                window.getSelection().removeAllRanges();
+            }
+
+            const originalText = button.textContent;
+            button.textContent = '✓ Copied!';
+            button.classList.add('copied');
+
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.classList.remove('copied');
+            }, 2000);
+        }
+
+        updatePrompt();
+    </script>
+</body>
+</html>
