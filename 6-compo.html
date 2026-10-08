@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Analysis Prompt Workspace</title>
+    <link rel="icon" href="spm.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf9f6;
+            --surface-color: #ffffff;
+            --border-color: #e2dfdc;
+            --border-focus: #706b63;
+            --text-main: #2c2a29;
+            --text-muted: #6e6963;
+            --accent: #1a1918;
+            --accent-hover: #383532;
+            --success: #2e7d32;
+            --header-color: #4338ca;
+            --font-serif: 'Newsreader', serif;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 40px 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .document-container {
+            max-width: 760px;
+            margin: 0 auto;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 48px 40px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
+        }
+
+        /* Header Styles */
+        .doc-header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 30px;
+        }
+
+        .doc-title {
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--header-color);
+            margin-bottom: 8px;
+        }
+
+        .doc-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        /* Section Layout */
+        .section-heading {
+            font-family: var(--font-serif);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 36px 0 16px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .reset-btn {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 3px 10px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .reset-btn:hover {
+            background: var(--border-color);
+            color: var(--text-main);
+        }
+
+        .doc-input {
+            width: 100%;
+            padding: 12px 16px;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            color: var(--text-main);
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            resize: vertical;
+            min-height: 120px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .doc-input:focus {
+            outline: none;
+            border-color: var(--border-focus);
+            background: var(--surface-color);
+            box-shadow: 0 0 0 3px rgba(112, 107, 99, 0.1);
+        }
+
+        /* Output Box Styling */
+        .output-card {
+            margin-top: 30px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .output-title {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .prompt-preview {
+            width: 100%;
+            min-height: 280px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 16px;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            color: var(--text-main);
+            line-height: 1.5;
+            resize: vertical;
+            white-space: pre-wrap;
+            margin-bottom: 16px;
+        }
+
+        .copy-btn {
+            background: var(--accent);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .copy-btn.copied {
+            background: var(--success);
+        }
+
+        /* Footer */
+        .doc-footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            body {
+                padding: 12px 8px;
+            }
+            .document-container {
+                padding: 24px 16px;
+            }
+            .doc-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="document-container">
+        
+        <!-- Header -->
+        <header class="doc-header">
+            <h1 class="doc-title">Content Analysis Prompt Workspace</h1>
+            <p class="doc-subtitle">Analyze content depth, Niche, Keywords, Issues, and Methods dynamically.</p>
+        </header>
+
+        <!-- User Inputs Section -->
+        <section>
+            <h2 class="section-heading">1. Dynamic Input Field</h2>
+            
+            <div class="input-group">
+                <div class="input-header-row">
+                    <label class="input-label" for="inputContent">Content Input Field:</label>
+                    <button class="reset-btn" onclick="resetField('inputContent')">Reset Field</button>
+                </div>
+                <textarea id="inputContent" class="doc-input" placeholder="এখানে content paste করুন" oninput="updatePrompt()">এখানে আপনার content দিন...</textarea>
+            </div>
+        </section>
+
+        <!-- Generated Output Section -->
+        <section>
+            <h2 class="section-heading">2. Generated Prompt Box</h2>
+            
+            <div class="output-card">
+                <div class="output-header">
+                    <span class="output-title">Prompt 1: Content Analysis Framework</span>
+                </div>
+                <textarea id="promptOutput" class="prompt-preview" readonly></textarea>
+                <button class="copy-btn" onclick="copyPrompt()">Copy to Clipboard</button>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="doc-footer">
+            Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.
+        </footer>
+
+    </div>
+
+    <script>
+        // Static Prompt Template maintaining exact original text and structure
+        const promptTemplate = `আপনি একটি নির্দিষ্ট content গভীরভাবে বিশ্লেষণ করে তার Niche, Primary Keyword, Central Topic of Discussion, Issue, Operational Rules এবং Method শনাক্ত করবেন।
+
+প্রথমে নিচের ছয়টি term-এর সংজ্ঞা ও পার্থক্য ভালোভাবে বুঝে নিন এবং content বিশ্লেষণের পুরো সময় এই definitions-গুলো কঠোরভাবে অনুসরণ করুন।
+
+Niche
+
+Niche হলো content-এর বৃহত্তর subject territory বা ক্ষেত্র। এটি একটি নির্দিষ্ট content-এর বিষয় নয়; বরং contentটি কোন বৃহত্তর domain, problem area বা subject area-এর অন্তর্গত তা নির্দেশ করে।
+
+সহজভাবে:
+Niche = Content Territory
+
+অর্থাৎ, “আমি কোন বৃহত্তর ক্ষেত্র নিয়ে কাজ করছি?”
+
+Keyword
+
+Keyword হলো সেই শব্দ বা phrase, যা একটি নির্দিষ্ট information need, topic বা search intent-কে প্রকাশ করে। এটি সাধারণত মানুষ কোনো বিষয় সম্পর্কে জানতে বা খুঁজতে যে শব্দ বা phrase ব্যবহার করতে পারে তাকে নির্দেশ করে।
+
+সহজভাবে:
+Keyword = Search Language
+
+অর্থাৎ, “মানুষ কী শব্দ বা phrase দিয়ে এই বিষয়টি খুঁজতে পারে?”
+
+Central Topic of Discussion
+
+Central Topic of Discussion হলো একটি নির্দিষ্ট content-এর মধ্যে যে বিষয়টিকে কেন্দ্র করে পুরো discussion unfold হয়। এটি content-এর সবচেয়ে নির্দিষ্ট intellectual centre—অর্থাৎ, এই particular content-এ আসলে কোন বিষয়টি নিয়ে আলোচনা হচ্ছে।
+
+সহজভাবে:
+Central Topic of Discussion = Discussion Centre
+
+অর্থাৎ, “এই content-এ আসলে কোন নির্দিষ্ট বিষয়টি নিয়ে আলোচনা করা হচ্ছে?”
+
+তিনটির পার্থক্য মনে রাখুন:
+
+Niche → আমি কোন বৃহত্তর ক্ষেত্র নিয়ে কাজ করছি?
+Keyword → মানুষ কী শব্দ বা phrase দিয়ে এই বিষয়টি খুঁজছে?
+Central Topic of Discussion → এই particular content-এ আসলে কোন নির্দিষ্ট বিষয়টি নিয়ে আলোচনা হচ্ছে?
+
+আরও সংক্ষেপে:
+
+Niche determines the territory.
+Keyword identifies the search entry point.
+Central Topic determines the intellectual centre of the content.
+
+Issue
+
+Issue হলো সেই problem, question, need বা gap-কে বোঝায়, যেটিকে contentটি address করছে। অর্থাৎ, audience-এর কোন সমস্যা, প্রশ্ন, প্রয়োজন বা information gap-এর দিকে contentটি focused।
+
+সহজভাবে:
+Issue = Problem / Need / Gap
+
+অর্থাৎ, “কোন problem, question, need বা gap-কে contentটি address করছে?”
+
+Operational Rules
+
+Operational Rules হলো সেই method-এর particular approach কেন কাজ করে, তার মূল নীতি বা logic। অর্থাৎ, কাজটি করার সময় একটি নির্দিষ্ট approach কেন কার্যকর হবে, তা নির্দেশ করে।
+
+সহজভাবে:
+Operational Rules = Why the Approach Works
+
+অর্থাৎ, “এই particular approach কেন কাজ করে?”
+
+Method
+
+Method হলো নির্দিষ্ট কাজটি কীভাবে করা হবে, তার practical approach বা process। অর্থাৎ, কাঙ্ক্ষিত outcome-এ পৌঁছতে কীভাবে কাজটি সম্পন্ন করা হবে, তা নির্দেশ করে।
+
+সহজভাবে:
+Method = How It Is Done
+
+অর্থাৎ, “কাজটি কীভাবে করা হবে?”
+
+তিনটির পার্থক্য মনে রাখুন:
+
+Issue → কোন problem, question, need বা gap-কে address করা হচ্ছে?
+Operational Rules → particular approach কেন কাজ করে?
+Method → কাজটি কীভাবে করা হবে?
+
+আরও সংক্ষেপে:
+
+Issue identifies the problem.
+Operational Rules explain why the approach works.
+Method defines how the work is done.
+
+TASK
+
+1. নিচের contentটি গভীরভাবে বিশ্লেষণ করুন এবং:
+2. Primary Keyword
+3. Central Topic of Discussion
+4. Issue
+5. Operational Rules
+6. Method
+
+শনাক্ত করুন।
+
+বিশ্লেষণের সময় এই নিয়মগুলি অনুসরণ করুন:
+
+1. Niche যেন অতিরিক্ত broad বা অতিরিক্ত narrow না হয়। Contentটির প্রকৃত বৃহত্তর subject territory নির্ধারণ করুন। Niche যেন Central Topic বা Keyword-এর মতো নির্দিষ্ট না হয়।
+2. Primary Keyword হিসেবে এমন একটি শব্দ বা phrase নির্বাচন করুন, যা contentটির মূল search topic বা information need-কে সবচেয়ে ভালোভাবে প্রকাশ করে। শুধু content-এ সবচেয়ে বেশি ব্যবহৃত শব্দকে keyword হিসেবে নির্বাচন করবেন না।
+
+3. Primary Keyword এমন হওয়া উচিত যা একজন সম্ভাব্য reader/searcher বাস্তবে search query হিসেবে ব্যবহার করতে পারে। Content-এর wording-এর সঙ্গে হুবহু মিলে যাওয়াকে বাধ্যতামূলক করবেন না।
+
+4. Central Topic of Discussion যেন শুধু একটি keyword-এর পুনরাবৃত্তি না হয়। Contentটির মধ্যে যে নির্দিষ্ট বিষয়টি নিয়ে মূল discussion তৈরি হয়েছে, সেটি নির্ধারণ করুন।
+
+5. Content-এ একাধিক বিষয় থাকলে দেখুন কোন বিষয়টি অন্য বিষয়গুলিকে organise বা connect করছে। সেটিকেই Central Topic of Discussion হিসেবে অগ্রাধিকার দিন।
+
+6. Content-এর title, opening, body, examples, arguments, questions এবং conclusion—সবকিছুর relationship বিবেচনা করুন। কোনো একটি isolated sentence বা example-এর ভিত্তিতে সিদ্ধান্ত নেবেন না।
+
+7. Issue শনাক্ত করার সময় contentটি সরাসরি বা পরোক্ষভাবে কোন problem, question, need বা information gap address করছে তা নির্ধারণ করুন। শুধু topic-কে Issue হিসেবে লিখবেন না।
+
+8. Operational Rules শনাক্ত করার সময় content-এ ব্যবহৃত approach-এর effectiveness-এর underlying principles, logic বা conditions খুঁজুন। “কী করতে হবে” এবং “কীভাবে করতে হবে”কে Operational Rule হিসেবে লিখবেন না যদি তা আসলে Method-এর অংশ হয়।
+
+9. Method শনাক্ত করার সময় contentটি কাঙ্ক্ষিত outcome-এ পৌঁছতে কী practical approach, process, steps বা way অনুসরণ করছে তা নির্ধারণ করুন। Method যেন শুধু outcome বা general advice না হয়।
+
+10. Operational Rules এবং Method একে অপরের সঙ্গে সম্পর্কিত হলেও এক করে ফেলবেন না:
+Operational Rules = কেন এই approach কাজ করে
+Method = এই approach ব্যবহার করে কীভাবে কাজটি করা হয়
+
+11. Content-এ যদি একাধিক method, approach বা principle থাকে, তাহলে কোনটি contentটির central issue address করার জন্য সবচেয়ে গুরুত্বপূর্ণ তা নির্ধারণ করুন এবং সেটিকে অগ্রাধিকার দিন।
+
+12. Content-এ কোনো explicit Operational Rule বা Method না থাকলে নিজের পক্ষ থেকে সম্পূর্ণ নতুন rule বা method তৈরি করবেন না। সেক্ষেত্রে content-এ যা reasonably supported, তার ভিত্তিতে সবচেয়ে defensible formulation দিন এবং প্রয়োজন হলে উল্লেখ করুন যে এটি content থেকে inferred।
+
+13. নিজের পক্ষ থেকে এমন কোনো বিষয় যোগ করবেন না যা content-এ যথেষ্টভাবে supported নয়।
+
+14. Keyword এবং Central Topic of Discussion এক হয়ে গেলে সেটি কেন হয়েছে তা ব্যাখ্যা করুন। জোর করে দুটিকে আলাদা করবেন না।
+
+15. Niche, Keyword এবং Central Topic—এই তিনটি যেন একই level-এর concept না হয়। প্রত্যেকটির আলাদা role বজায় রাখুন।
+
+16. Issue, Operational Rules এবং Method-এর ক্ষেত্রেও একইভাবে conceptual level-এর পার্থক্য বজায় রাখুন। Issue-কে Method, Method-কে Operational Rule, অথবা Operational Rule-কে Issue হিসেবে পুনরায় label করবেন না।
+
+17. প্রতিটি শনাক্তকরণের ক্ষেত্রে content-এর সামগ্রিক meaning এবং discussion structure-কে অগ্রাধিকার দিন; isolated keyword বা sentence-কে নয়।
+
+18. যেখানে একটি interpretation-এর পরিবর্তে একাধিক plausible interpretation থাকতে পারে, সেখানে সবচেয়ে strongly supported interpretation নির্বাচন করুন এবং Why অংশে সংক্ষেপে তার ভিত্তি ব্যাখ্যা করুন।
+
+OUTPUT FORMAT
+
+Niche:
+[নির্ধারিত Niche]
+
+Why:
+[কেন এটি contentটির বৃহত্তর subject territory—সংক্ষেপে ব্যাখ্যা করুন]
+
+Primary Keyword:
+[নির্ধারিত primary keyword]
+
+Why:
+[কেন এই keyword contentটির মূল search topic বা information need-কে সবচেয়ে ভালোভাবে প্রকাশ করে—সংক্ষেপে ব্যাখ্যা করুন]
+
+Central Topic of Discussion:
+[contentটির নির্দিষ্ট discussion centre]
+
+Why:
+[কেন এটিই contentটির মূল discussion centre—সংক্ষেপে ব্যাখ্যা করুন]
+
+Issue:
+[contentটি যে specific problem, question, need বা information gap address করছে]
+
+Why:
+[কেন এটিই contentটির Issue—সংক্ষেপে ব্যাখ্যা করুন]
+
+Operational Rules:
+[content-এর approach কেন কাজ করে তার মূল principle, logic বা condition]
+
+Why:
+[কেন এটিকে Operational Rule হিসেবে চিহ্নিত করা হয়েছে—সংক্ষেপে ব্যাখ্যা করুন]
+
+Method:
+[content-এ ব্যবহৃত practical approach, process বা way of doing the work]
+
+Why:
+[কেন এটিই contentটির Method—সংক্ষেপে ব্যাখ্যা করুন]
+
+RELATIONSHIP
+
+শেষে তিনটির relationship এক লাইনে দেখান:
+
+Niche → Keyword → Central Topic of Discussion
+
+তারপর এক লাইনে ব্যাখ্যা করুন:
+
+“Niche” contentটির বৃহত্তর territory, “Keyword” তার search entry point, এবং “Central Topic of Discussion” হলো এই particular content-এর intellectual centre।
+
+এরপর Issue, Operational Rules এবং Method-এর relationship এক লাইনে দেখান:
+
+Issue → Operational Rules → Method
+
+তারপর এক লাইনে ব্যাখ্যা করুন:
+
+“Issue” identifies the problem, “Operational Rules” explain why the approach works, and “Method” defines how the work is done.
+
+
+CONTENT TO ANALYZE
+
+{USER_CONTENT}`;
+
+        // Function to update the prompt in real-time as the user types
+        function updatePrompt() {
+            const content = document.getElementById('inputContent').value;
+            let finalPrompt = promptTemplate.replace('{USER_CONTENT}', content);
+            document.getElementById('promptOutput').value = finalPrompt;
+        }
+
+        // Reset individual input field and refresh prompt box without altering prompt template text
+        function resetField(fieldId) {
+            const field = document.getElementById(fieldId);
+            field.value = '';
+            updatePrompt();
+            field.focus();
+        }
+
+        // Copy functionality with visual feedback
+        function copyPrompt() {
+            const outputBox = document.getElementById('promptOutput');
+            const btn = document.querySelector('.copy-btn');
+
+            outputBox.select();
+            outputBox.setSelectionRange(0, 99999);
+
+            try {
+                document.execCommand('copy');
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Copied!';
+                btn.classList.add('copied');
+
+                window.getSelection().removeAllRanges();
+
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+            }
+        }
+
+        // Initialize prompt generation on page load
+        window.onload = updatePrompt;
+    </script>
+</body>
+</html>
