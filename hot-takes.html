@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hot Takes Article Prompt Generator</title>
+    <link rel="icon" href="spm.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf9f6;
+            --surface-color: #ffffff;
+            --border-color: #e2dfdc;
+            --border-focus: #706b63;
+            --text-main: #2c2a29;
+            --text-muted: #6e6963;
+            --accent: #1a1918;
+            --accent-hover: #383532;
+            --success: #2e7d32;
+            --header-color: #4338ca;
+            --font-serif: 'Newsreader', serif;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 40px 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .document-container {
+            max-width: 760px;
+            margin: 0 auto;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 48px 40px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
+        }
+
+        /* Header Styles */
+        .doc-header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 30px;
+        }
+
+        .doc-title {
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--header-color);
+            margin-bottom: 8px;
+        }
+
+        .doc-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        /* Section Layout */
+        .section-heading {
+            font-family: var(--font-serif);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 36px 0 16px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .input-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .reset-field-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .reset-field-btn:hover {
+            border-color: var(--border-focus);
+            color: var(--text-main);
+        }
+
+        .doc-input {
+            width: 100%;
+            padding: 12px 16px;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            color: var(--text-main);
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            resize: vertical;
+            min-height: 80px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .doc-input:focus {
+            outline: none;
+            border-color: var(--border-focus);
+            background: var(--surface-color);
+            box-shadow: 0 0 0 3px rgba(112, 107, 99, 0.1);
+        }
+
+        /* Output Box Styling */
+        .output-card {
+            margin-top: 30px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .output-title {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .prompt-preview {
+            width: 100%;
+            min-height: 220px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 16px;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            color: var(--text-main);
+            line-height: 1.5;
+            resize: vertical;
+            white-space: pre-wrap;
+            margin-bottom: 16px;
+        }
+
+        .copy-btn {
+            background: var(--accent);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .copy-btn.copied {
+            background: var(--success);
+        }
+
+        /* Footer */
+        .doc-footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            body {
+                padding: 12px 8px;
+            }
+            .document-container {
+                padding: 24px 16px;
+            }
+            .doc-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="document-container">
+        
+        <!-- Header -->
+        <header class="doc-header">
+            <h1 class="doc-title">Hot Takes Article</h1>
+            <p class="doc-subtitle">(for medium.com)</p>
+        </header>
+
+        <!-- User Inputs Section -->
+        <section>
+            <h2 class="section-heading">Dynamic Input Fields</h2>
+            
+            <div class="input-group">
+                <div class="input-header-row">
+                    <label class="input-label" for="inputActivity">MANUAL INPUT 1 — ACTIVITY</label>
+                    <button class="reset-field-btn" onclick="resetField('inputActivity')">Reset Field</button>
+                </div>
+                <textarea id="inputActivity" class="doc-input" placeholder="Enter activity..." oninput="updatePrompt()"></textarea>
+            </div>
+
+            <div class="input-group">
+                <div class="input-header-row">
+                    <label class="input-label" for="inputActivityDesc">MANUAL INPUT 2 — ACTIVITY DESCRIPTION</label>
+                    <button class="reset-field-btn" onclick="resetField('inputActivityDesc')">Reset Field</button>
+                </div>
+                <textarea id="inputActivityDesc" class="doc-input" placeholder="Enter activity description..." oninput="updatePrompt()"></textarea>
+            </div>
+
+            <div class="input-group">
+                <div class="input-header-row">
+                    <label class="input-label" for="inputPrinciple">MANUAL INPUT 3 — PRINCIPLE</label>
+                    <button class="reset-field-btn" onclick="resetField('inputPrinciple')">Reset Field</button>
+                </div>
+                <textarea id="inputPrinciple" class="doc-input" placeholder="Enter principle..." oninput="updatePrompt()"></textarea>
+            </div>
+
+            <div class="input-group">
+                <div class="input-header-row">
+                    <label class="input-label" for="inputRule">MANUAL INPUT 4 — RULE</label>
+                    <button class="reset-field-btn" onclick="resetField('inputRule')">Reset Field</button>
+                </div>
+                <textarea id="inputRule" class="doc-input" placeholder="Enter rule..." oninput="updatePrompt()"></textarea>
+            </div>
+        </section>
+
+        <!-- Generated Output Section -->
+        <section>
+            <h2 class="section-heading">Prompt Box</h2>
+            
+            <div class="output-card">
+                <div class="output-header">
+                    <span class="output-title">Live Prompt Preview</span>
+                </div>
+                <textarea id="promptOutput" class="prompt-preview" readonly></textarea>
+                <button class="copy-btn" onclick="copyPrompt()">Copy to Clipboard</button>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="doc-footer">
+            Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.
+        </footer>
+
+    </div>
+
+    <script>
+        const promptTemplate = `Answer the following prompt in Bengali (India).
+
+Rules:
+- Use only Bengali (India).
+- Always address the reader as "আপনি".
+- Never use "তুমি" or "তুই".
+- Use a natural Kolkata-style conversational tone.
+- Use natural, modern Bengali (India).
+- Avoid Bangladeshi vocabulary, spelling, and expressions.
+
+PROMPT
+
+Create a professional Medium.com article outline based on the provided Activity, Activity Description, Principle, and Rule.
+
+The article must use a question-driven narrative structure that moves naturally from a real-world failure to the underlying Principle, then to the operational Rule, and finally to the practical Procedure as the solution.
+
+The article must not feel like a generic how-to article, listicle, sales article, or promotional article.
+
+Its primary purpose is to help the reader understand WHY a particular approach works by showing what happens when the underlying Principle is violated, and then showing how the Principle, Rule, and Procedure resolve the problem.
+
+
+MANUAL INPUT 1 — ACTIVITY
+
+[Activity]
+{ACTIVITY}
+
+
+MANUAL INPUT 2 — ACTIVITY DESCRIPTION
+
+[Activity Description]
+{ACTIVITY_DESC}
+
+
+MANUAL INPUT 3 — PRINCIPLE
+
+[Principle]
+{PRINCIPLE}
+
+
+MANUAL INPUT 4 — RULE
+
+[Rule]
+{RULE}
+
+
+CORE LOGIC
+
+Build the article around this reasoning chain:
+
+Activity
+↓
+Failure caused by violating the Principle
+↓
+Consequences
+↓
+Why did the failure happen?
+↓
+Principle
+↓
+Rule
+↓
+Procedure / Solution
+↓
+Conclusion
+
+The article must make the relationship between these elements intellectually clear.
+
+The Principle must function as the underlying WHY.
+
+The Rule must function as the WHAT SHOULD or SHOULD NOT BE DONE.
+
+The Procedure must function as the HOW.
+
+
+ARTICLE OUTLINE REQUIREMENTS
+
+
+1. OPENING QUESTION
+
+Begin the article with one sharp, specific question directly related to the Activity.
+
+The question should create an immediate information gap.
+
+It should make the reader want to know the answer.
+
+Do not begin with a generic introduction.
+
+Do not begin with background information.
+
+Do not begin with a statement such as "In today's digital world..." or any similar generic opening.
+
+The question must be relevant to the actual problem addressed by the Principle and Rule.
+
+
+2. IMMEDIATE ANSWER
+
+Immediately after the opening question, provide the answer in the very next line.
+
+The answer should be concise, direct, and proposition-driven.
+
+Do not delay the answer.
+
+Do not create suspense by withholding the answer.
+
+The reader should understand the central proposition of the article almost immediately.
+
+The answer should establish the correct direction without fully explaining the reasoning yet.
+
+
+3. FAILURE STORY
+
+Introduce one realistic, believable person or business operating within the identified Activity.
+
+Create a concise failure scenario in which the person or business follows an approach that violates the underlying Principle.
+
+The failure must be specifically connected to the provided Principle and Rule.
+
+Do not create an arbitrary failure story.
+
+Do not introduce unrelated problems.
+
+The story should demonstrate what happens when the Principle is ignored or the Rule is violated.
+
+The person, business, situation, and actions must be plausible within the identified Activity.
+
+Do not exaggerate the story merely for dramatic effect.
+
+
+4. SHOW THE FAILURE AND ITS CONSEQUENCES
+
+Do not merely tell the reader that the approach failed.
+
+Show the failure through observable consequences.
+
+Identify the immediate consequence of the wrong approach.
+
+Then identify the important downstream consequences that follow from it.
+
+Where appropriate, structure the consequences as a visible chain:
+
+Wrong Action
+→ Immediate Consequence
+→ Secondary Consequence
+→ Business / User Consequence
+→ Final Outcome
+
+The outline should specify what should be visually demonstrated rather than merely described.
+
+For example:
+
+Show:
+Confused visitor
+→ Multiple competing choices
+→ No clear next step
+→ Assessment ignored
+→ Weak conversion
+
+Do not rely only on abstract statements such as "this creates confusion."
+
+
+5. SECOND QUESTION — THE TURNING POINT
+
+After showing the failure and its consequences, introduce a second sharp question:
+
+"Why did this failure happen?"
+
+The question should function as the intellectual turning point of the article.
+
+It should shift the reader's attention from the visible failure to the underlying reason behind it.
+
+Do not immediately give the Principle before this question.
+
+
+6. SERVE THE PRINCIPLE
+
+After the second question, introduce the provided Principle as the underlying explanation for the failure.
+
+The outline must show:
+
+What the Principle means.
+
+Why the Principle matters to the Activity.
+
+How violating the Principle produced the failure described earlier.
+
+The Principle should not appear as an isolated quotation or abstract statement.
+
+Connect it directly back to the failure story.
+
+The reader should feel:
+
+"Now I understand what was actually wrong."
+
+
+7. EXPLAIN THE RULE
+
+After establishing the Principle, introduce the provided Rule.
+
+Explain how the Rule follows logically from the Principle.
+
+Make the relationship explicit:
+
+Principle
+→ Therefore
+→ Rule
+
+Explain:
+
+What the Rule says.
+
+What should be done.
+
+What should not be done, where applicable.
+
+Why following the Rule prevents the failure described earlier.
+
+Do not introduce unrelated rules.
+
+Do not turn this section into a list of generic tips.
+
+
+8. SERVE THE PROCEDURE AS THE THESIS / SOLUTION
+
+Derive a practical Procedure from the Activity, Principle, and Rule.
+
+The Procedure must answer:
+
+"Given this Principle and Rule, what should someone actually do?"
+
+The Procedure should be the practical solution to the failure demonstrated earlier.
+
+Structure it as a clear sequence where appropriate.
+
+The Procedure should show how to move from the current Activity state toward the desired outcome.
+
+The Procedure must remain directly connected to the Principle and Rule.
+
+Do not introduce a Procedure that contradicts the Principle.
+
+Do not introduce unnecessary tactics that are unrelated to the core problem.
+
+The Procedure should feel like the natural consequence of understanding the Principle and applying the Rule.
+
+
+9. CLOSE THE LOOP
+
+Before the conclusion, briefly connect the Procedure back to the original failure story.
+
+Show how applying the correct Procedure would change the earlier outcome.
+
+Use the same Activity and context so that the article's reasoning forms a complete loop:
+
+Original approach
+→ Failure
+→ Why it failed
+→ Principle
+→ Rule
+→ Correct Procedure
+→ Different outcome
+
+
+10. VERY SHORT CONCLUSION
+
+End with a very short conclusion.
+
+Do not introduce a new idea.
+
+Do not add a new principle.
+
+Do not add unrelated advice.
+
+Do not repeat the entire article.
+
+Reinforce only the central proposition:
+
+Principle
+→ Rule
+→ Procedure
+
+The conclusion should leave the reader with a clear understanding of what they should do differently.
+
+
+ARTICLE OUTLINE DESIGN RULES
+
+1. The article must have one central intellectual proposition.
+
+2. Do not create multiple competing theses.
+
+3. The failure must demonstrate a violation of the Principle.
+
+4. The consequences must logically follow from the failure.
+
+5. The second question must expose the need to understand the Principle.
+
+6. The Principle must explain WHY.
+
+7. The Rule must explain WHAT SHOULD or SHOULD NOT BE DONE.
+
+8. The Procedure must explain HOW.
+
+9. The Procedure must solve the problem demonstrated by the failure story.
+
+10. Every major section must move the reader toward the next question or insight.
+
+11. Do not reveal the full reasoning before the appropriate stage.
+
+12. Do not turn the article into a conventional listicle.
+
+13. Do not use unnecessary headings merely to create more sections.
+
+14. Keep the narrative progression natural and intellectually coherent.
+
+15. Avoid generic motivational language.
+
+16. Avoid exaggerated claims.
+
+17. Avoid unnecessary jargon.
+
+18. Use concrete situations wherever possible.
+
+19. Prefer showing through situations, actions, consequences, and visual sequences rather than merely telling.
+
+20. The article should feel like an intelligent explanation of how the Activity actually works, not a promotional pitch.
+
+
+SHOW, DON'T MERELY TELL
+
+For every important consequence, identify what the reader should be able to visualize.
+
+Where useful, specify:
+
+What happens.
+
+Who experiences it.
+
+What they see.
+
+What they do next.
+
+What goes wrong.
+
+What consequence follows.
+
+Use visual chains, scenario descriptions, comparison structures, or concrete examples where appropriate.
+
+Do not simply write:
+
+"This creates confusion."
+
+Instead, show:
+
+"One visitor arrives at the Pinterest profile, sees several unrelated offers, cannot determine which one is meant for them, and leaves without taking any action."
+
+
+OUTLINE DEPTH
+
+For every major section provide:
+
+Section Title:
+Purpose:
+Key Question:
+Key Point:
+What the reader should understand:
+Story / Example:
+Visual / Show-Don't-Tell Element:
+Transition to Next Section:
+
+Do not write the full article.
+
+Generate only the detailed outline.
+
+
+FINAL STRUCTURE
+
+Use this overall structure unless the Activity clearly requires a better variation:
+
+1. Opening Question
+​2. Immediate Answer
+3. Failure Story
+4. Failure Consequences
+5. Why Did This Failure Happen?
+6. Underlying Principle
+7. Operational Rule
+8. Procedure / Solution
+9. Close the Loop
+10. Very Short Conclusion
+
+
+FINAL QUALITY CHECK
+
+Before producing the outline, verify:
+
+1. The Activity is clearly reflected throughout the outline.
+
+2. The failure is caused by violating or ignoring the Principle.
+
+3. The consequences logically follow from the failure.
+
+4. The second question naturally leads to the Principle.
+
+5. The Principle genuinely explains WHY.
+
+6. The Rule genuinely explains WHAT SHOULD or SHOULD NOT BE DONE.
+
+7. The Procedure genuinely explains HOW.
+
+8. The Procedure is a logical application of the Principle and Rule.
+
+9. The Procedure directly addresses the failure demonstrated earlier.
+
+10. The article has one clear central proposition.
+
+11. The outline does not become a generic how-to article.
+
+12. The visual elements show consequences rather than merely telling the reader about them.
+
+13. The conclusion is short and does not introduce new information.
+
+14. The entire outline forms one coherent reasoning chain.
+
+OUTPUT ONLY THE ARTICLE OUTLINE.`;
+
+        function updatePrompt() {
+            const activity = document.getElementById('inputActivity').value;
+            const activityDesc = document.getElementById('inputActivityDesc').value;
+            const principle = document.getElementById('inputPrinciple').value;
+            const rule = document.getElementById('inputRule').value;
+
+            let finalPrompt = promptTemplate
+                .replace('{ACTIVITY}', activity)
+                .replace('{ACTIVITY_DESC}', activityDesc)
+                .replace('{PRINCIPLE}', principle)
+                .replace('{RULE}', rule);
+
+            document.getElementById('promptOutput').value = finalPrompt;
+        }
+
+        function resetField(fieldId) {
+            document.getElementById(fieldId).value = '';
+            updatePrompt();
+        }
+
+        function copyPrompt() {
+            const outputBox = document.getElementById('promptOutput');
+            const btn = document.querySelector('.copy-btn');
+
+            outputBox.select();
+            outputBox.setSelectionRange(0, 99999);
+
+            try {
+                document.execCommand('copy');
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Copied!';
+                btn.classList.add('copied');
+
+                window.getSelection().removeAllRanges();
+
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+            }
+        }
+
+        window.onload = updatePrompt;
+    </script>
+</body>
+</html>

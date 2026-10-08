@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Activity Finder</title>
+<link rel="icon" href="spm.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf9f6;--surface:#fff;--border:#e2dfdc;--focus:#706b63;--text:#2c2a29;--muted:#6e6963;--accent:#1a1918;--hover:#383532;--success:#2e7d32;--header:#4338ca;--serif:'Newsreader',serif;--sans:'Plus Jakarta Sans',sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{padding:40px 20px;font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.6}.document-container{max-width:900px;margin:auto;padding:48px 40px;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,.02)}.doc-header{text-align:center;margin-bottom:40px;padding-bottom:30px;border-bottom:1px solid var(--border)}.doc-title{margin-bottom:8px;font:600 2.2rem var(--serif);letter-spacing:-.02em;color:var(--header)}.doc-subtitle{font-size:.95rem;color:var(--muted)}.section-heading{margin:36px 0 16px;padding-bottom:8px;font:600 1.3rem var(--serif);border-bottom:1px dashed var(--border)}.input-label{display:block;margin-bottom:8px;font-size:.9rem;font-weight:500}.input-row{display:flex;gap:10px;align-items:flex-start}.doc-input{flex:1;width:100%;min-height:140px;padding:12px 16px;resize:vertical;font:.95rem var(--sans);color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:8px}.doc-input:focus{outline:0;border-color:var(--focus);background:var(--surface);box-shadow:0 0 0 3px rgba(112,107,99,.1)}button{padding:10px 16px;font:500 .85rem var(--sans);cursor:pointer;border:0;border-radius:6px}.reset-btn{color:var(--text);background:#ece9e5}.reset-btn:hover{background:#ddd8d2}.output-card{margin-top:30px;padding:24px;background:var(--bg);border:1px solid var(--border);border-radius:8px}.output-title{font:600 1.1rem var(--serif)}.prompt-preview{width:100%;min-height:720px;margin:12px 0 16px;padding:16px;resize:vertical;font:.9rem/1.5 var(--sans);color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:6px;white-space:pre-wrap}.copy-btn{color:#fff;background:var(--accent)}.copy-btn:hover{background:var(--hover)}.copy-btn.copied{background:var(--success)}.doc-footer{margin-top:50px;padding-top:20px;text-align:center;font-size:.85rem;color:var(--muted);border-top:1px solid var(--border)}#promptTemplate{display:none}@media(max-width:640px){body{padding:12px 8px}.document-container{padding:24px 16px}.doc-title{font-size:1.8rem}.input-row{flex-direction:column}.reset-btn{width:100%}}
+</style>
+</head>
+<body>
+<main class="document-container">
+<header class="doc-header">
+    <h1 class="doc-title">Activity Finder</h1>
+    <p class="doc-subtitle">(from a source content)</p>
+</header>
+
+<section>
+    <h2 class="section-heading">1. Variables &amp; Inputs</h2>
+    <label class="input-label" for="contentInput">[Paste the content here]</label>
+    <div class="input-row">
+        <textarea id="contentInput" class="doc-input" oninput="updatePrompt()"></textarea>
+        <button class="reset-btn" type="button" onclick="resetInput()">Reset</button>
+    </div>
+</section>
+
+<section>
+    <h2 class="section-heading">2. Generated Output Prompt</h2>
+    <article class="output-card">
+        <span class="output-title">Prompt 1</span>
+        <textarea id="promptOutput" class="prompt-preview" readonly></textarea>
+        <button class="copy-btn" type="button" onclick="copyPrompt(this)">Copy to Clipboard</button>
+    </article>
+</section>
+
+<footer class="doc-footer">
+    Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.
+</footer>
+</main>
+
+<textarea id="promptTemplate">Analyze the provided content and convert it into a reusable Activity Knowledge Structure.
+
+The required knowledge structure is:
+
+Activity → Principle → Rule → Procedure
+
+Use the following definitions throughout the analysis:
+
+Activity = The specific activity that the content describes, suggests, or teaches.
+
+Principle = The underlying reason, logic, or fundamental idea that explains WHY the activity should be performed in a particular way.
+
+Rule = The operational instruction that specifies WHAT should or should not be done while performing the activity.
+
+Procedure = The practical method that explains HOW the activity, rule, or recommended approach can be carried out step by step.
+
+
+COMPLETENESS REQUIREMENT
+
+Do not limit the analysis to a fixed number of Principles, Rules, Procedures, or Principle → Rule → Procedure combinations.
+
+Identify ALL distinct, valid, non-overlapping combinations that can be reasonably established for the identified Activity.
+
+Continue identifying additional combinations until no further meaningful combination can be established without speculation, unsupported assumptions, redundancy, duplication, artificial expansion, or unnecessary fragmentation.
+
+The objective is maximum meaningful coverage of the Activity's knowledge structure, not a predetermined number of outputs.
+
+Do not create additional items merely to make the output longer.
+
+
+PART 1 — ACTIVITY IDENTIFICATION
+
+Identify the specific activity that the provided content describes, suggests, or teaches.
+
+MANDATORY RULES:
+
+1. Identify the Activity strictly and exclusively from the provided content.
+
+2. Do not use external knowledge, assumptions, general knowledge, or analytical reasoning to identify the Activity.
+
+3. Identify the activity at the most specific level that the content itself supports.
+
+4. Do not choose a broader activity when the content clearly supports a more specific activity.
+
+5. Do not choose a narrower activity when the content does not support that level of specificity.
+
+6. Do not replace the actual activity with a related, adjacent, or implied activity.
+
+7. The Activity must represent what the content is actually describing, suggesting, or teaching, not merely a topic mentioned in the content.
+
+8. If the content discusses multiple activities, identify the primary activity that the content is mainly describing, suggesting, or teaching.
+
+9. Do not combine multiple separate activities into one Activity merely to simplify the output.
+
+10. If no single primary activity can be reliably identified, state:
+
+"একটি নির্দিষ্ট Primary Activity নির্ভরযোগ্যভাবে শনাক্ত করা যায়নি।"
+
+
+OUTPUT:
+
+Activity:
+[Specific activity]
+
+Activity Description:
+[Brief description of the identified activity based strictly on the provided content]
+
+
+PART 2 — PRINCIPLE IDENTIFICATION
+
+Identify all distinct, meaningful, and non-overlapping fundamental principles governing the identified Activity.
+
+A Principle must answer:
+
+"এই Activity-টি এইভাবে করা উচিত কেন?"
+
+IMPORTANT:
+
+1. Principles do NOT have to be explicitly stated in the provided content.
+
+2. You may use established knowledge, domain knowledge, logical reasoning, and analytical understanding of the identified Activity.
+
+3. Identify only genuine and fundamental principles relevant to the Activity.
+
+4. Do not invent principles merely to increase the number of outputs.
+
+5. A Principle must explain WHY.
+
+6. Do not write an operational instruction as a Principle.
+
+7. Do not write a step-by-step method as a Principle.
+
+8. Do not present a Rule merely by changing its wording into a general statement.
+
+9. A Principle should remain meaningful across multiple situations in which the Activity is performed.
+
+10. Prefer fundamental principles over superficial tips or isolated recommendations.
+
+11. Identify every materially distinct Principle that can be reasonably established.
+
+12. Merge Principles when they express substantially the same underlying idea.
+
+13. Keep separate Principles separate when they represent genuinely different reasons, mechanisms, or governing ideas.
+
+
+For each Principle, provide:
+
+Principle:
+[Fundamental principle]
+
+Why:
+[Brief explanation of why this principle matters to the Activity]
+
+Source Type:
+[Content-derived / Analyst-derived]
+
+
+PART 3 — RULE IDENTIFICATION
+
+For every relevant Principle, identify all distinct, valid, non-overlapping operational Rules that follow from that Principle.
+
+A Rule must answer:
+
+"এই Principle অনুসরণ করতে হলে কী করা উচিত বা কী করা উচিত নয়?"
+
+IMPORTANT:
+
+1. Rules do NOT have to be explicitly stated in the provided content.
+
+2. You may derive Rules from the identified Principles using established knowledge, domain knowledge, and logical reasoning.
+
+3. Every Rule must be directly relevant to the identified Activity.
+
+4. Every Rule must be actionable.
+
+5. Every Rule must clearly specify something that should be done or should not be done.
+
+6. Do not write vague advice as a Rule.
+
+7. Do not repeat the Principle as a Rule.
+
+8. Do not write a step-by-step method as a Rule.
+
+9. Do not create multiple Rules that are merely different wordings of the same instruction.
+
+10. Each Rule must be logically connected to at least one identified Principle.
+
+11. Identify all materially distinct Rules that can reasonably be derived from each Principle.
+
+12. Do not limit the number of Rules per Principle.
+
+13. Stop only when no further meaningful, distinct Rule can be established without speculation, redundancy, or artificial expansion.
+
+
+For each Rule, provide:
+
+Rule:
+[What should or should not be done]
+
+Type:
+[Should do / Should not do]
+
+Based on Principle:
+[Relevant Principle]
+
+Source Type:
+[Content-derived / Analyst-derived]
+
+
+PART 4 — PROCEDURE IDENTIFICATION
+
+Identify all meaningful Procedures through which the relevant Rules can be practically implemented.
+
+A Procedure must answer:
+
+"এই Rule বাস্তবে কীভাবে প্রয়োগ করা হবে?"
+
+IMPORTANT:
+
+1. Procedures may be derived from the content, established knowledge, domain knowledge, or logical reasoning.
+
+2. A Procedure must describe HOW something is done.
+
+3. Do not present a Principle as a Procedure.
+
+4. Do not present a Rule as a Procedure.
+
+5. A Procedure should contain a practical sequence of actions where sequencing is relevant.
+
+6. A Procedure may contain multiple steps when multiple steps are genuinely required.
+
+7. Do not artificially create a step-by-step procedure when a Rule can be implemented directly without one.
+
+8. Identify all materially distinct Procedures that are reasonably useful for implementing the identified Rules.
+
+9. Do not limit the number of Procedures.
+
+10. Stop only when no further meaningful Procedure can be established without speculation, redundancy, duplication, or artificial expansion.
+
+
+For each Procedure, provide:
+
+Procedure:
+[Step-by-step method]
+
+Implements Rule:
+[Relevant Rule]
+
+Source Type:
+[Content-derived / Analyst-derived]
+
+
+PART 5 — SOURCE SEPARATION
+
+Clearly distinguish between knowledge that comes from the provided content and knowledge that has been derived through analysis.
+
+Use only these two classifications:
+
+Content-derived:
+The information is directly stated or clearly supported by the provided content.
+
+Analyst-derived:
+The information is not explicitly stated in the content but has been derived using established knowledge, domain knowledge, logical reasoning, or analysis of the identified Activity.
+
+IMPORTANT:
+
+1. Never label an item as Content-derived merely because it is consistent with the content.
+
+2. If the content does not directly state or clearly support the item, classify it as Analyst-derived.
+
+3. The Activity must always be identified using only the provided content.
+
+4. Principles, Rules, and Procedures may be Analyst-derived.
+
+5. Do not allow Analyst-derived information to be presented as if it were explicitly stated by the content.
+
+
+PART 6 — PRINCIPLE → RULE → PROCEDURE RELATIONSHIP
+
+Maintain an explicit logical relationship between every level of the structure.
+
+The relationship must be:
+
+Activity
+↓
+Principle
+↓
+Rule
+↓
+Procedure
+
+Use this logic:
+
+Activity = What activity are we dealing with?
+
+Principle = Why should the activity be performed in a particular way?
+
+Rule = What should or should not be done because of that Principle?
+
+Procedure = How should the Rule be practically implemented?
+
+Every Rule must be connected to a relevant Principle.
+
+Every Procedure must be connected to a relevant Rule.
+
+Do not create disconnected Principles, Rules, or Procedures.
+
+If one Principle legitimately leads to multiple Rules, list all relevant Rules.
+
+If one Rule can be implemented through multiple genuinely distinct Procedures, list all relevant Procedures.
+
+Do not force a one-to-one relationship between Principle, Rule, and Procedure.
+
+
+PART 7 — NON-OVERLAP AND DEDUPLICATION
+
+Before finalizing the structure:
+
+1. Compare all Principles with one another.
+
+2. Merge Principles that express substantially the same underlying idea.
+
+3. Compare all Rules within each Principle.
+
+4. Merge Rules that express substantially the same operational instruction.
+
+5. Compare all Procedures.
+
+6. Remove Procedures that are merely repetitions or trivial rewordings of another Procedure.
+
+7. Do not split one meaningful Principle into several artificial Principles merely because it produces more outputs.
+
+8. Do not combine genuinely different Principles merely to reduce the number of outputs.
+
+9. Do not create multiple Rules from the same instruction unless they represent genuinely different actions or constraints.
+
+10. Preserve every materially distinct piece of knowledge.
+
+
+PART 8 — DISTINGUISH PRINCIPLE, RULE, AND PROCEDURE
+
+Use the following test before classifying each item:
+
+If the statement primarily explains WHY:
+Classify it as Principle.
+
+If the statement primarily specifies WHAT SHOULD or SHOULD NOT be done:
+Classify it as Rule.
+
+If the statement primarily explains HOW to perform or implement something:
+Classify it as Procedure.
+
+If a statement contains both WHY and WHAT, separate the underlying Principle from the corresponding Rule where possible.
+
+If a statement contains both WHAT and HOW, separate the Rule from the Procedure where possible.
+
+
+PART 9 — FINAL COMPLETENESS CHECK
+
+Before producing the final answer, actively search for additional valid knowledge relationships.
+
+Ask internally:
+
+1. Have all materially distinct Principles relevant to the Activity been identified?
+
+2. For each Principle, have all materially distinct Rules been identified?
+
+3. For each Rule that genuinely requires a method, have all materially useful Procedures been identified?
+
+4. Is there any additional Principle that is genuinely distinct and relevant?
+
+5. Is there any additional Rule that is genuinely distinct and actionable?
+
+6. Is there any additional Procedure that is genuinely distinct and useful?
+
+Continue the analysis until the answer to all three categories is effectively no.
+
+Do not stop after finding only two or three combinations.
+
+Do not create additional combinations merely to satisfy completeness.
+
+Completeness means maximum meaningful coverage, not maximum quantity.
+
+
+PART 10 — QUALITY CONTROL
+
+Before finalizing the output, verify all of the following:
+
+1. The Activity is identifiable strictly from the provided content.
+
+2. No external knowledge was used to identify the Activity.
+
+3. The Activity represents the primary activity of the content.
+
+4. Every Principle genuinely explains WHY.
+
+5. Every Rule genuinely specifies WHAT should or should not be done.
+
+6. Every Procedure genuinely explains HOW.
+
+7. Every Rule is connected to a relevant Principle.
+
+8. Every Procedure is connected to a relevant Rule.
+
+9. Principles, Rules, and Procedures do not unnecessarily repeat one another.
+
+10. No superficial advice has been presented as a fundamental Principle.
+
+11. No vague statement has been presented as a Rule.
+
+12. No simple Rule has been expanded into a fake step-by-step Procedure.
+
+13. Content-derived and Analyst-derived knowledge are clearly distinguished.
+
+14. No information has been added merely to make the output longer.
+
+15. All materially distinct and reasonably supportable knowledge relationships have been included.
+
+16. No fixed number of Principles, Rules, Procedures, or combinations has been imposed.
+
+17. The final structure is reusable as a general knowledge model for the identified Activity.
+
+
+FINAL OUTPUT FORMAT
+
+ACTIVITY
+
+Activity:
+[Specific activity]
+
+Activity Description:
+[Description based strictly on the provided content]
+
+
+PRINCIPLES
+
+1.
+Principle:
+Why:
+Source Type:
+
+2.
+Principle:
+Why:
+Source Type:
+
+[Continue until all meaningful, distinct Principles have been identified]
+
+
+RULES
+
+1.
+Rule:
+Type:
+Based on Principle:
+Source Type:
+
+2.
+Rule:
+Type:
+Based on Principle:
+Source Type:
+
+[Continue until all meaningful, distinct Rules have been identified]
+
+
+PROCEDURES
+
+1.
+Procedure:
+Implements Rule:
+Source Type:
+
+2.
+Procedure:
+Implements Rule:
+Source Type:
+
+[Continue until all meaningful, distinct Procedures have been identified]
+
+
+KNOWLEDGE STRUCTURE SUMMARY
+
+Activity:
+[Activity]
+
+Principle 1:
+[Principle]
+  → Rule:
+    [Rule]
+      → Procedure:
+        [Procedure]
+
+  → Rule:
+    [Rule]
+      → Procedure:
+        [Procedure]
+
+Principle 2:
+[Principle]
+  → Rule:
+    [Rule]
+      → Procedure:
+        [Procedure]
+
+[Continue for all valid Principle → Rule → Procedure relationships]
+
+
+PROVIDED CONTENT
+
+[Paste the content here]</textarea>
+
+<script>
+const template = document.getElementById('promptTemplate').value;
+
+function updatePrompt() {
+    const content = document.getElementById('contentInput').value || '[Paste the content here]';
+    document.getElementById('promptOutput').value =
+        template.replace('[Paste the content here]', content);
+}
+
+function resetInput() {
+    document.getElementById('contentInput').value = '';
+    updatePrompt();
+}
+
+async function copyPrompt(button) {
+    const output = document.getElementById('promptOutput');
+
+    try {
+        await navigator.clipboard.writeText(output.value);
+    } catch (error) {
+        output.select();
+        document.execCommand('copy');
+        window.getSelection().removeAllRanges();
+    }
+
+    const originalText = button.textContent;
+    button.textContent = '✓ Copied!';
+    button.classList.add('copied');
+
+    setTimeout(() => {
+        button.textContent = originalText;
+        button.classList.remove('copied');
+    }, 2000);
+}
+
+updatePrompt();
+</script>
+</body>
+</html>
