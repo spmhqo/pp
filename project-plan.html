@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Plan</title>
+    <link rel="icon" href="spm.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf9f6;
+            --surface-color: #ffffff;
+            --border-color: #e2dfdc;
+            --border-focus: #5e7f79;
+            --text-main: #2c2a29;
+            --text-muted: #6e6963;
+            --accent: #1a1918;
+            --accent-hover: #383532;
+            --header-color: #245c57;
+            --success: #2e7d32;
+            --font-serif: "Newsreader", Georgia, serif;
+            --font-sans: "Plus Jakarta Sans", "Noto Sans Bengali", sans-serif;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            min-height: 100vh;
+            padding: 40px 20px;
+            background: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .document-container {
+            width: min(100%, 860px);
+            margin: 0 auto;
+            padding: 48px 40px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, .02);
+        }
+
+        .doc-header {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .doc-title {
+            margin-bottom: 8px;
+            color: var(--header-color);
+            font-family: var(--font-serif);
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-weight: 600;
+            line-height: 1.12;
+        }
+
+        .doc-subtitle {
+            color: var(--text-muted);
+            font-size: .98rem;
+        }
+
+        .section-heading {
+            margin: 36px 0 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--border-color);
+            color: var(--accent);
+            font-family: var(--font-serif);
+            font-size: 1.35rem;
+            font-weight: 600;
+        }
+
+        .input-group { margin-bottom: 24px; }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-main);
+            font-size: .95rem;
+            font-weight: 600;
+        }
+
+        .doc-input, .prompt-preview {
+            width: 100%;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            font-size: .96rem;
+            line-height: 1.65;
+            resize: vertical;
+            transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+        }
+
+        .doc-input {
+            min-height: 118px;
+            padding: 14px 16px;
+            background: var(--bg-color);
+        }
+
+        .doc-input:focus {
+            outline: none;
+            border-color: var(--border-focus);
+            background: var(--surface-color);
+            box-shadow: 0 0 0 3px rgba(94, 127, 121, .12);
+        }
+
+        .input-actions, .output-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        button {
+            border: 0;
+            border-radius: 6px;
+            padding: 10px 18px;
+            font-family: var(--font-sans);
+            font-size: .85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .2s ease, transform .1s ease;
+        }
+
+        button:active { transform: translateY(1px); }
+
+        .reset-btn {
+            background: #ece9e4;
+            color: var(--text-main);
+        }
+
+        .reset-btn:hover { background: #dedad3; }
+
+        .output-card {
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-color);
+        }
+
+        .output-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .output-title {
+            color: var(--accent);
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .prompt-preview {
+            min-height: 460px;
+            padding: 16px;
+            background: var(--surface-color);
+            white-space: pre-wrap;
+        }
+
+        .copy-btn {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .copy-btn:hover { background: var(--accent-hover); }
+        .copy-btn.copied { background: var(--success); }
+
+        .doc-footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: .85rem;
+            text-align: center;
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 12px 8px; }
+            .document-container { padding: 28px 18px; }
+            .doc-header { margin-bottom: 30px; padding-bottom: 22px; }
+            .output-card { padding: 16px; }
+            .prompt-preview { min-height: 400px; }
+        }
+    </style>
+</head>
+<body>
+    <main class="document-container">
+        <header class="doc-header">
+            <h1 class="doc-title">Project Plan</h1>
+            <p class="doc-subtitle">(to launch)</p>
+        </header>
+
+        <section aria-labelledby="input-heading">
+            <h2 class="section-heading" id="input-heading">Project Details</h2>
+
+            <div class="input-group">
+                <label class="input-label" for="topicInput">Topic:</label>
+                <textarea id="topicInput" class="doc-input" placeholder="[Central Topic of Discussions]" oninput="updatePrompt()"></textarea>
+                <div class="input-actions">
+                    <button class="reset-btn" type="button" onclick="resetInput('topicInput')">Reset</button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label" for="keywordsInput">Keywords:</label>
+                <textarea id="keywordsInput" class="doc-input" placeholder="[Keywords]" oninput="updatePrompt()"></textarea>
+                <div class="input-actions">
+                    <button class="reset-btn" type="button" onclick="resetInput('keywordsInput')">Reset</button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label" for="nicheInput">Niche:</label>
+                <textarea id="nicheInput" class="doc-input" placeholder="[Niche]" oninput="updatePrompt()"></textarea>
+                <div class="input-actions">
+                    <button class="reset-btn" type="button" onclick="resetInput('nicheInput')">Reset</button>
+                </div>
+            </div>
+        </section>
+
+        <section aria-labelledby="prompt-heading">
+            <h2 class="section-heading" id="prompt-heading">Prompt</h2>
+            <div class="output-card">
+                <div class="output-header">
+                    <span class="output-title">Live Prompt Preview</span>
+                </div>
+                <textarea id="promptOutput" class="prompt-preview" readonly aria-label="Generated prompt"></textarea>
+                <div class="output-actions">
+                    <button class="copy-btn" type="button" onclick="copyPrompt()">Copy Prompt</button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="doc-footer">
+            Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.
+        </footer>
+    </main>
+
+    <script>
+        const promptTemplate = `Topic: 
+
+[Central Topic of Discussions]
+
+Keywords:
+
+[Keywords]
+
+Niche: 
+
+[Niche]
+
+OPERATING SYSTEM
+
+Activity#1: Product
+Activity#2: Promo: BP | SMP | Buyer's Keyword
+Activity#3: Spices
+Activity#4: NISMS
+Activity#5: CRM
+Activity#6: Continuation > Public (R's Q of Free product) | Private (R's Q of Paid product)
+Activity#7: Special Compulsive Contents`;
+
+        function updatePrompt() {
+            const topic = document.getElementById('topicInput').value || '[Central Topic of Discussions]';
+            const keywords = document.getElementById('keywordsInput').value || '[Keywords]';
+            const niche = document.getElementById('nicheInput').value || '[Niche]';
+
+            const prompt = promptTemplate
+                .replace('[Central Topic of Discussions]', topic)
+                .replace('[Keywords]', keywords)
+                .replace('[Niche]', niche);
+
+            document.getElementById('promptOutput').value = prompt;
+        }
+
+        function resetInput(inputId) {
+            const input = document.getElementById(inputId);
+            input.value = '';
+            updatePrompt();
+            input.focus();
+        }
+
+        async function copyPrompt() {
+            const output = document.getElementById('promptOutput');
+            const button = document.querySelector('.copy-btn');
+            try {
+                await navigator.clipboard.writeText(output.value);
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 1800);
+            } catch (error) {
+                output.select();
+                document.execCommand('copy');
+            }
+        }
+
+        updatePrompt();
+    </script>
+</body>
+</html>

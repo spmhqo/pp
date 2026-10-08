@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answer Reader's Question</title>
+    <link rel="icon" href="spm.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,0,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #faf9f6;
+            --surface-color: #ffffff;
+            --border-color: #e2dfdc;
+            --border-focus: #706b63;
+            --text-main: #2c2a29;
+            --text-muted: #6e6963;
+            --accent: #1a1918;
+            --accent-hover: #383532;
+            --success: #2e7d32;
+            --header-color: #4338ca;
+            --font-serif: 'Newsreader', serif;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 40px 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .document-container {
+            max-width: 760px;
+            margin: 0 auto;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 48px 40px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
+        }
+
+        .doc-header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 30px;
+        }
+
+        .doc-title {
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--header-color);
+            margin-bottom: 8px;
+        }
+
+        .doc-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .section-heading {
+            font-family: var(--font-serif);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 36px 0 16px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .doc-input {
+            width: 100%;
+            padding: 12px 16px;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            color: var(--text-main);
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .doc-input:focus {
+            outline: none;
+            border-color: var(--border-focus);
+            background: var(--surface-color);
+            box-shadow: 0 0 0 3px rgba(112, 107, 99, 0.1);
+        }
+
+        .reset-btn {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            font-family: var(--font-sans);
+            font-size: 0.78rem;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .reset-btn:hover {
+            background: var(--bg-color);
+            color: var(--text-main);
+            border-color: var(--border-focus);
+        }
+
+        .prompt-card {
+            margin-bottom: 24px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .prompt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .prompt-title {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .prompt-preview {
+            width: 100%;
+            min-height: 180px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 16px;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            color: var(--text-main);
+            line-height: 1.55;
+            resize: vertical;
+            white-space: pre-wrap;
+            margin-bottom: 12px;
+        }
+
+        .copy-btn {
+            background: var(--accent);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .copy-btn:active {
+            transform: translateY(1px);
+        }
+
+        .copy-btn.copied {
+            background: var(--success);
+        }
+
+        .doc-footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 12px 8px;
+            }
+
+            .document-container {
+                padding: 24px 16px;
+            }
+
+            .doc-title {
+                font-size: 1.8rem;
+            }
+
+            .doc-subtitle {
+                font-size: 0.88rem;
+            }
+
+            .input-header {
+                align-items: flex-start;
+            }
+
+            .prompt-card {
+                padding: 16px;
+                margin-bottom: 20px;
+            }
+
+            .prompt-preview {
+                min-height: 220px;
+                font-size: 0.88rem;
+                padding: 14px;
+            }
+
+            .copy-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="document-container">
+
+        <header class="doc-header">
+            <h1 class="doc-title">Answer Reader's Question</h1>
+            <p class="doc-subtitle">(blog post and Facebook post)</p>
+        </header>
+
+        <section>
+            <h2 class="section-heading">1. Variables &amp; Inputs</h2>
+
+            <div class="input-group">
+                <div class="input-header">
+                    <label class="input-label" for="inputContent">Content to find reader's questions</label>
+                    <button class="reset-btn" type="button" onclick="resetInput('inputContent')">Reset</button>
+                </div>
+                <textarea id="inputContent" class="doc-input" placeholder="[Content to find reader's questions]" oninput="updatePrompts()"></textarea>
+            </div>
+
+            <div class="input-group">
+                <div class="input-header">
+                    <label class="input-label" for="inputContext">Context</label>
+                    <button class="reset-btn" type="button" onclick="resetInput('inputContext')">Reset</button>
+                </div>
+                <textarea id="inputContext" class="doc-input" placeholder="[এখানে বিষয় / সমস্যা / keyword / audience / desired outcome / অন্যান্য প্রয়োজনীয় context দেওয়া হবে]" oninput="updatePrompts()"></textarea>
+            </div>
+
+            <div class="input-group">
+                <div class="input-header">
+                    <label class="input-label" for="inputFinalBlog">Final Blog Post</label>
+                    <button class="reset-btn" type="button" onclick="resetInput('inputFinalBlog')">Reset</button>
+                </div>
+                <textarea id="inputFinalBlog" class="doc-input" placeholder="[এখানে আপনার manually edited Final Blog Post paste করুন]" oninput="updatePrompts()"></textarea>
+            </div>
+
+            <div class="input-group">
+                <div class="input-header">
+                    <label class="input-label" for="inputUrl">Blog URL</label>
+                    <button class="reset-btn" type="button" onclick="resetInput('inputUrl')">Reset</button>
+                </div>
+                <textarea id="inputUrl" class="doc-input" placeholder="[এখানে Blog Post-এর actual URL paste করুন]" oninput="updatePrompts()"></textarea>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-heading">2. Prompts</h2>
+
+            <div class="prompt-card">
+                <div class="prompt-header">
+                    <span class="prompt-title">Prompt#1</span>
+                </div>
+                <textarea id="prompt1" class="prompt-preview" readonly></textarea>
+                <button class="copy-btn" onclick="copyPrompt('prompt1', this)">Copy to Clipboard</button>
+            </div>
+            <div class="prompt-card">
+                <div class="prompt-header">
+                    <span class="prompt-title">Prompt#2</span>
+                </div>
+                <textarea id="prompt2" class="prompt-preview" readonly></textarea>
+                <button class="copy-btn" onclick="copyPrompt('prompt2', this)">Copy to Clipboard</button>
+            </div>
+            <div class="prompt-card">
+                <div class="prompt-header">
+                    <span class="prompt-title">Prompt#3</span>
+                </div>
+                <textarea id="prompt3" class="prompt-preview" readonly></textarea>
+                <button class="copy-btn" onclick="copyPrompt('prompt3', this)">Copy to Clipboard</button>
+            </div>
+            <div class="prompt-card">
+                <div class="prompt-header">
+                    <span class="prompt-title">Prompt#4</span>
+                </div>
+                <textarea id="prompt4" class="prompt-preview" readonly></textarea>
+                <button class="copy-btn" onclick="copyPrompt('prompt4', this)">Copy to Clipboard</button>
+            </div>
+            <div class="prompt-card">
+                <div class="prompt-header">
+                    <span class="prompt-title">Prompt#5</span>
+                </div>
+                <textarea id="prompt5" class="prompt-preview" readonly></textarea>
+                <button class="copy-btn" onclick="copyPrompt('prompt5', this)">Copy to Clipboard</button>
+            </div>
+            <div class="prompt-card">
+                <div class="prompt-header">
+                    <span class="prompt-title">Prompt#6</span>
+                </div>
+                <textarea id="prompt6" class="prompt-preview" readonly></textarea>
+                <button class="copy-btn" onclick="copyPrompt('prompt6', this)">Copy to Clipboard</button>
+            </div>
+        </section>
+
+        <footer class="doc-footer">
+            Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.
+        </footer>
+
+    </div>
+
+    <script>
+            const prompt1Template = "Answer the following prompt in Bengali (India).\n\nRules:\n- Use only Bengali (India).\n- Always address the reader as \"আপনি\".\n- Never use \"তুমি\" or \"তুই\".\n- Use a natural Kolkata-style conversational tone.\n- Use natural, modern Bengali (India).\n- Avoid Bangladeshi vocabulary, spelling, and expressions.\n\nPROMPT\n\nRead, understand, and review the content below.\n\nTASK\n\nIdentify the questions that a reader may naturally have after reading the content, especially when the topic is new to the reader.\n\nLook beyond questions that are explicitly addressed in the content. Identify questions that may arise because of:\n\n1. Unfamiliar concepts, terms, or ideas\n​2. Information the reader may need to understand the content properly\n3. Prerequisites or dependencies\n4. Uncertainty about how to execute what is taught\n5. Possible problems, mistakes, or limitations\n6. Practical use or application in different situations\n7. Doubts about whether, when, or why the method should be used\n8. Possible next steps after applying what is taught\n9. Information the reader may need but the content does not provide\n\nOrganize the questions according to their underlying purpose or type.\n\nThe objective is to discover the reader's potential unanswered questions and information needs created by the content, not merely to generate a generic FAQ.\n\nFocus on identifying genuine information gaps, execution-related questions, practical concerns, and next-step questions that are likely to arise naturally from the content.\n\nCONTENT\n\n[Content to find reader's questions]";
+            const prompt2Template = "ROLE\n\nতুমি একজন Strategic Content Funnel Architect এবং Content Writer।\n\nতোমার কাজ হলো একটি নির্দিষ্ট বিষয়, সমস্যা, keyword, audience need অথবা desired outcome-কে কেন্দ্র করে একটি সমন্বিত দুই-স্তরীয় content funnel তৈরি করা।\n\nএই funnel-এর primary content হলো Blog Post এবং entry content হলো Facebook Post।\n\nBlog Post = Primary Content + Actual Solution Delivery\n\nFacebook Post = Entry Point + Blog Visit Driver\n\nCORE FUNNEL LOGIC\n\nপুরো reader journey হবে:\n\nProblem Recognition → Facebook Post → Blog Visit → Detailed Understanding → Practical Solution → Action\n\nBlog Post হবে self-contained এবং Facebook Post-এর ওপর নির্ভরশীল হবে না।\n\nFacebook Post হবে Blog Post-এর entry point, কিন্তু Blog Post-এর substitute হবে না।\n\n\nCONTENT RELATIONSHIP RULES\n\n1. The Blog Post is the Primary Content. The Facebook Post is an Entry Point to the Blog Post. Blog Post এবং Facebook Post একই core problem, audience need অথবা desired outcome-এর সঙ্গে connected থাকবে।\n\n2. Final Blog Post is the only source of truth for finalising the Facebook Post. Final Blog Post হবে মূল value delivery content।\n\n3. Facebook Post পাঠকের problem awareness, interest এবং curiosity তৈরি করবে এবং Blog Post-এ যাওয়ার natural reason তৈরি করবে।\n\n4. Facebook Post-এ Blog Post-এর complete solution দেওয়া যাবে না।\n\n5. ইচ্ছাকৃতভাবে গুরুত্বপূর্ণ information লুকিয়ে artificial curiosity তৈরি করা যাবে না।\n\n6. Facebook Post এবং Blog Post-এর মধ্যে conceptual continuity থাকবে, কিন্তু unnecessary content duplication থাকবে না।\n\n7. Facebook Post-এর promise এবং Blog Post-এর actual delivery-এর মধ্যে কোনো mismatch থাকবে না।\n\n8. Blog Post এমনভাবে লিখবে যাতে পাঠক Facebook Post না পড়েও সম্পূর্ণ বিষয়টি বুঝতে এবং solution প্রয়োগ করতে পারেন।\n\n9. Blog Post-এর শেষে এমন CTA থাকবে যা content-এর উদ্দেশ্যের সঙ্গে সামঞ্জস্যপূর্ণ এবং reader-কে একটি meaningful next action-এর দিকে এগিয়ে নেয়।\n\n\nBLOG POST RULES\n\nBlog Post হবে:\n\nProblem-focused\nSolution-focused\nAction-oriented\nPractical\nSelf-contained\n\nপ্রয়োজন অনুযায়ী নিচের structure ব্যবহার করবে:\n\nTitle\nIntroduction\nProblem\nWhy the Problem Happens or Matters\nStep-by-Step Solution\nExamples or Practical Tips\nCommon Mistakes or Important Considerations\nSummary\nCTA\n\nসব section সবসময় ব্যবহার করা বাধ্যতামূলক নয়।\n\nশুধু যে section content-এর জন্য প্রয়োজনীয়, সেটিই ব্যবহার করবে।\n\nStep-by-Step Solution হবে Blog Post-এর প্রধান value delivery section।\n\nপ্রতিটি step বাস্তবে অনুসরণযোগ্য করার চেষ্টা করবে।\n\nপ্রয়োজনে process, checklist, examples, instructions, decision points, mistakes to avoid এবং practical tips ব্যবহার করবে।\n\n\nFACEBOOK POST RULES\n\nFacebook Post-এর primary purpose হবে:\n\nProblem Awareness → Interest → Curiosity → Blog Visit\n\nFacebook Post হবে:\n\nRelevant\nRelatable\nSpecific\nNatural\nCredible\n\nসম্ভাব্য structure:\n\nHook\nProblem or Experience\nWhy It Matters\nMeaningful Insight\nCuriosity or Credible Promise\nBlog CTA\n\nFacebook Post Blog Post-এর summary হবে না।\n\nFacebook Post mini-blog হবে না।\n\nFacebook Post complete solution দেবে না।\n\nFacebook Post শুধুমাত্র promotional advertisement-ও হবে না।\n\nএর কাজ হবে reader-এর problem-এর সঙ্গে connection তৈরি করা এবং Blog Post-এ যাওয়ার একটি genuine reason তৈরি করা।\n\n\nDEPTH RULE\n\nBlog Post:\n\nHigh Information Depth\nDetailed Solution\nPractical Application\nActionability\n\nFacebook Post:\n\nShallow-to-Medium Information Depth\nHigh Relevance\nProblem Awareness\nCuriosity\n\nঅর্থাৎ:\n\nFacebook Post পাঠককে solution-এর দরজায় নিয়ে যাবে।\n\nBlog Post পাঠককে সেই দরজার ভিতরে নিয়ে গিয়ে solution ব্যবহার করতে শেখাবে।\n\n\nCTA RULE\n\nFacebook Post-এর CTA হবে:\n\nFacebook → Blog\n\nBlog Post-এর CTA হবে:\n\nBlog → Desired Next Action\n\nFacebook CTA natural হবে এবং Blog Post-এর value-এর সঙ্গে connected থাকবে।\n\nClickbait, exaggerated claim এবং artificial urgency ব্যবহার করবে না।\n\n\nQUALITY CONTROL\n\nFinal output দেওয়ার আগে silently যাচাই করবে:\n\n1. Blog Post এবং Facebook Post একই core problem-এর সঙ্গে aligned কি না।\n2. Blog Post প্রকৃত solution delivery করছে কি না।\n3. Blog Post self-contained কি না।\n4. Facebook Post Blog Post-এর duplicate হয়েছে কি না।\n5. Facebook Post complete solution দিয়ে ফেলেছে কি না।\n6. Facebook Post genuine curiosity তৈরি করছে কি না।\n7. Facebook Post-এর promise Blog Post deliver করছে কি না।\n8. Facebook CTA Blog Post-এর দিকে নিয়ে যাচ্ছে কি না।\n9. Blog CTA meaningful next action-এর দিকে নিয়ে যাচ্ছে কি না।\n10. দুই content-এর মধ্যে natural reader progression আছে কি না।\n\n\nINPUT\n\nনিচের তথ্যের ভিত্তিতে content funnel তৈরি করো:\n\n[এখানে বিষয় / সমস্যা / keyword / audience / desired outcome / অন্যান্য প্রয়োজনীয় context দেওয়া হবে]\n\n\nOUTPUT\n\nনিচের ক্রম অবশ্যই বজায় রাখবে।\n\n1. Blog Post\n\nসম্পূর্ণ Blog Post লিখবে।\n\nBlog Post হবে primary content এবং actual solution delivery।\n\n2. Facebook Post\n\nউপরের Blog Post-এর ভিত্তিতে সম্পূর্ণ Facebook Post লিখবে।\n\nFacebook Post হবে Blog Post-এর entry point।\n\n3. Funnel Alignment Check\n\nশুধু নিচের বিষয়গুলো সংক্ষেপে দেখাবে:\n\nBlog Post-এর মূল job:\nFacebook Post-এর মূল job:\nFacebook → Blog transition:\nBlog → Action transition:\n\nএই অংশে নতুন content লিখবে না।";
+            const prompt3Template = "https://spmhqo.github.io/arq/refine-blog-post.html";
+            const prompt4Template = "ROLE\n\nতুমি একজন Strategic Content Funnel Architect এবং Content Writer।\n\nতোমার কাজ হলো একটি নির্দিষ্ট বিষয়, সমস্যা, keyword, audience need অথবা desired outcome-কে কেন্দ্র করে একটি সমন্বিত দুই-স্তরীয় content funnel তৈরি করা।\n\nএই funnel-এর primary content হলো Blog Post এবং entry content হলো Facebook Post।\n\nBlog Post = Primary Content + Actual Solution Delivery\n\nFacebook Post = Entry Point + Blog Visit Driver\n\nCORE FUNNEL LOGIC\n\nপুরো reader journey হবে:\n\nProblem Recognition → Facebook Post → Blog Visit → Detailed Understanding → Practical Solution → Action\n\nBlog Post হবে self-contained এবং Facebook Post-এর ওপর নির্ভরশীল হবে না।\n\nFacebook Post হবে Blog Post-এর entry point, কিন্তু Blog Post-এর substitute হবে না।\n\n\nCONTENT RELATIONSHIP RULES\n\n1. Blog Post এবং Facebook Post একই core problem, audience need অথবা desired outcome-এর সঙ্গে connected থাকবে।\n\n2. Blog Post হবে মূল value delivery content।\n\n3. Facebook Post পাঠকের problem awareness, interest এবং curiosity তৈরি করবে এবং Blog Post-এ যাওয়ার natural reason তৈরি করবে।\n\n4. Facebook Post-এ Blog Post-এর complete solution দেওয়া যাবে না।\n\n5. ইচ্ছাকৃতভাবে গুরুত্বপূর্ণ information লুকিয়ে artificial curiosity তৈরি করা যাবে না।\n\n6. Facebook Post এবং Blog Post-এর মধ্যে conceptual continuity থাকবে, কিন্তু unnecessary content duplication থাকবে না।\n\n7. Facebook Post-এর promise এবং Blog Post-এর actual delivery-এর মধ্যে কোনো mismatch থাকবে না।\n\n8. Blog Post এমনভাবে লিখবে যাতে পাঠক Facebook Post না পড়েও সম্পূর্ণ বিষয়টি বুঝতে এবং solution প্রয়োগ করতে পারেন।\n\n9. Blog Post-এর শেষে এমন CTA থাকবে যা content-এর উদ্দেশ্যের সঙ্গে সামঞ্জস্যপূর্ণ এবং reader-কে একটি meaningful next action-এর দিকে এগিয়ে নেয়।\n\n\nBLOG POST RULES\n\nBlog Post হবে:\n\nProblem-focused\nSolution-focused\nAction-oriented\nPractical\nSelf-contained\n\nপ্রয়োজন অনুযায়ী নিচের structure ব্যবহার করবে:\n\nTitle\nIntroduction\nProblem\nWhy the Problem Happens or Matters\nStep-by-Step Solution\nExamples or Practical Tips\nCommon Mistakes or Important Considerations\nSummary\nCTA\n\nসব section সবসময় ব্যবহার করা বাধ্যতামূলক নয়।\n\nশুধু যে section content-এর জন্য প্রয়োজনীয়, সেটিই ব্যবহার করবে।\n\nStep-by-Step Solution হবে Blog Post-এর প্রধান value delivery section।\n\nপ্রতিটি step বাস্তবে অনুসরণযোগ্য করার চেষ্টা করবে।\n\nপ্রয়োজনে process, checklist, examples, instructions, decision points, mistakes to avoid এবং practical tips ব্যবহার করবে।\n\n\nFACEBOOK POST RULES\n\nFacebook Post-এর primary purpose হবে:\n\nProblem Awareness → Interest → Curiosity → Blog Visit\n\nFacebook Post হবে:\n\nRelevant\nRelatable\nSpecific\nNatural\nCredible\n\nসম্ভাব্য structure:\n\nHook\nProblem or Experience\nWhy It Matters\nMeaningful Insight\nCuriosity or Credible Promise\nBlog CTA\n\nFacebook Post Blog Post-এর summary হবে না।\n\nFacebook Post mini-blog হবে না।\n\nFacebook Post complete solution দেবে না।\n\nFacebook Post শুধুমাত্র promotional advertisement-ও হবে না।\n\nএর কাজ হবে reader-এর problem-এর সঙ্গে connection তৈরি করা এবং Blog Post-এ যাওয়ার একটি genuine reason তৈরি করা।\n\n\nDEPTH RULE\n\nBlog Post:\n\nHigh Information Depth\nDetailed Solution\nPractical Application\nActionability\n\nFacebook Post:\n\nShallow-to-Medium Information Depth\nHigh Relevance\nProblem Awareness\nCuriosity\n\nঅর্থাৎ:\n\nFacebook Post পাঠককে solution-এর দরজায় নিয়ে যাবে।\n\nBlog Post পাঠককে সেই দরজার ভিতরে নিয়ে গিয়ে solution ব্যবহার করতে শেখাবে।\n\n\nCTA RULE\n\nFacebook Post-এর CTA হবে:\n\nFacebook → Blog\n\nBlog Post-এর CTA হবে:\n\nBlog → Desired Next Action\n\nFacebook CTA natural হবে এবং Blog Post-এর value-এর সঙ্গে connected থাকবে।\n\nClickbait, exaggerated claim এবং artificial urgency ব্যবহার করবে না।\n\n\nQUALITY CONTROL\n\nFinal output দেওয়ার আগে silently যাচাই করবে:\n\n1. Blog Post এবং Facebook Post একই core problem-এর সঙ্গে aligned কি না।\n2. Blog Post প্রকৃত solution delivery করছে কি না।\n3. Blog Post self-contained কি না।\n4. Facebook Post Blog Post-এর duplicate হয়েছে কি না।\n5. Facebook Post complete solution দিয়ে ফেলেছে কি না।\n6. Facebook Post genuine curiosity তৈরি করছে কি না।\n7. Facebook Post-এর promise Blog Post deliver করছে কি না।\n8. Facebook CTA Blog Post-এর দিকে নিয়ে যাচ্ছে কি না।\n9. Blog CTA meaningful next action-এর দিকে নিয়ে যাচ্ছে কি না।\n10. দুই content-এর মধ্যে natural reader progression আছে কি না।\n\n\nINPUT\n\nনিচের তথ্যের ভিত্তিতে content funnel তৈরি করো:\n\n[এখানে বিষয় / সমস্যা / keyword / audience / desired outcome / অন্যান্য প্রয়োজনীয় context দেওয়া হবে]\n\n\nOUTPUT\n\nনিচের ক্রম অবশ্যই বজায় রাখবে।\n\n1. Blog Post\n\nসম্পূর্ণ Blog Post লিখবে।\n\nBlog Post হবে primary content এবং actual solution delivery।\n\n2. Facebook Post\n\nউপরের Blog Post-এর ভিত্তিতে সম্পূর্ণ Facebook Post লিখবে।\n\nFacebook Post হবে Blog Post-এর entry point।\n\n3. Funnel Alignment Check\n\nশুধু নিচের বিষয়গুলো সংক্ষেপে দেখাবে:\n\nBlog Post-এর মূল job:\nFacebook Post-এর মূল job:\nFacebook → Blog transition:\nBlog → Action transition:\n\nএই অংশে নতুন content লিখবে না।";
+            const prompt5Template = "ROLE\n\nতুমি একজন Strategic Content Funnel Editor এবং Facebook Content Finalizer।\n\nএই prompt-টি Prompt 1-এর immediate follow-up হিসেবে একই chat-এ ব্যবহার করা হবে।\n\nPrompt 1-এর মাধ্যমে ইতিমধ্যে একটি Blog Post এবং একটি Facebook Post তৈরি হয়েছে।\n\nএরপর user Blog Post-টি manually edit করেছেন।\n\nএখন তোমার কাজ হলো সেই manually edited Final Blog Post-এর ভিত্তিতে আগের Facebook Post-টিকে finalise করা।\n\n\nMOST IMPORTANT RULE\n\nFINAL BLOG POST = SOURCE OF TRUTH\n\nUser যে manually edited Blog Post এখন দেবে, সেটিই Final Blog Post হিসেবে বিবেচনা করবে।\n\nPrompt 1-এর original Blog Post এবং Final Blog Post-এর মধ্যে কোনো পার্থক্য থাকলে Final Blog Post-কে সবসময় অগ্রাধিকার দেবে।\n\nFinal Blog Post-এ যদি topic angle, problem framing, promise, structure, solution, examples, terminology, emphasis অথবা CTA পরিবর্তিত হয়ে থাকে, Final Facebook Post সেই পরিবর্তনের সঙ্গে সামঞ্জস্যপূর্ণ করবে।\n\n\nEXISTING FACEBOOK POST\n\nPrompt 1-এর মাধ্যমে তৈরি Facebook Post-কে existing draft হিসেবে বিবেচনা করবে।\n\nশূন্য থেকে অপ্রয়োজনে নতুন Facebook Post তৈরি করবে না।\n\nপ্রথমে existing Facebook Post এবং Final Blog Post-এর relationship বুঝবে।\n\nতারপর প্রয়োজনীয় অংশ edit, replace, strengthen, shorten অথবা restructure করবে।\n\nযে অংশগুলো এখনও effective এবং Final Blog Post-এর সঙ্গে aligned, সেগুলো অপ্রয়োজনে পরিবর্তন করবে না।\n\n\nFINAL FACEBOOK POST-এর PURPOSE\n\nFinal Facebook Post হবে Final Blog Post-এর Entry Point।\n\nএর reader journey হবে:\n\nProblem Recognition → Interest → Curiosity → Desire to Know More → Blog Visit\n\nFinal Facebook Post-এর primary conversion হবে Blog Visit।\n\n\nALIGNMENT RULES\n\n1. Core Problem Alignment\n\n Final Blog Post is the only source of truth for finalising the Facebook Post. Facebook Post-এর core problem অবশ্যই Final Blog Post-এর core problem-এর সঙ্গে aligned হবে।\n\n2. Angle Alignment\n\nFinal Blog Post-এর final angle যদি original draft-এর থেকে পরিবর্তিত হয়, Facebook Post-এর angle-ও প্রয়োজন অনুযায়ী পরিবর্তন করবে।\n\n3. Promise Alignment\n\nFacebook Post এমন কোনো promise করবে না যা Final Blog Post deliver করে না।\n\nFinal Blog Post-এর মূল promise যদি পরিবর্তিত হয়ে থাকে, Facebook Post-এর promise সেই অনুযায়ী revise করবে।\n\n4. Hook Alignment\n\nFinal Blog Post-এর final angle, problem এবং promise অনুযায়ী Facebook Post-এর hook পুনরায় যাচাই করবে।\n\nপ্রয়োজনে hook পরিবর্তন করবে।\n\nHook হবে specific, relevant, natural এবং attention-grabbing।\n\n5. Insight Alignment\n\nFinal Blog Post-এর কোনো গুরুত্বপূর্ণ insight Facebook Post-এর relevance বা curiosity বাড়াতে সাহায্য করলে প্রয়োজন অনুযায়ী সেটি ব্যবহার করতে পারো।\n\nতবে Blog Post-এর complete solution Facebook Post-এ প্রকাশ করবে না।\n\n6. Solution Leakage\n\nFinal Blog Post-এর detailed steps, complete process, full framework অথবা complete actionable solution Facebook Post-এ তুলে দেবে না।\n\nFacebook Post meaningful value দিতে পারে, কিন্তু Blog Post-এর actual delivery replace করবে না।\n\n7. Duplication Control\n\nFinal Facebook Post Final Blog Post-এর summary হবে না।\n\nBlog Post-এর paragraph বা section copy করবে না।\n\nদুই content-এর মধ্যে conceptual continuity থাকবে, কিন্তু unnecessary repetition থাকবে না।\n\n8. Tone and Reader Connection\n\nOriginal Facebook Post-এর effective tone এবং reader connection বজায় রাখবে, যদি সেগুলো Final Blog Post-এর সঙ্গে compatible হয়।\n\n9. CTA Alignment\n\nFinal Facebook Post-এর CTA অবশ্যই Final Blog Post-এর দিকে পাঠককে নিয়ে যাবে।\n\nCTA content-এর natural continuation হবে, promotional interruption-এর মতো হবে না।\n\n\nBLOG URL RULE\n\nUser-provided Blog URL Final Facebook Post-এর CTA-তে naturalভাবে যোগ করবে।\n\nActual URL দেওয়া থাকলে সেটিই ব্যবহার করবে।\n\nনিজে থেকে কোনো URL invent করবে না।\n\nযদি Blog URL দেওয়া না থাকে, তাহলে:\n\n[BLOG URL]\n\nplaceholder ব্যবহার করবে।\n\nএক্ষেত্রে Final Alignment Check-এ সংক্ষেপে জানাবে যে actual Blog URL বসাতে হবে।\n\n\nWHAT YOU MUST NOT DO\n\n1. Blog Post পুনরায় লিখবে না।\n2. Blog Post-এর summary লিখবে না।\n3. নতুন topic নিয়ে Facebook Post লিখবে না।\n4. Final Blog Post-এর complete solution Facebook Post-এ প্রকাশ করবে না।\n5. Original Facebook Post-এর effective অংশ অকারণে বাদ দেবে না।\n6. Final Blog Post-এর সঙ্গে mismatch থাকা claim রাখবে না।\n7. Blog URL invent করবে না।\n8. Final Blog Post-এর meaning নিজের অনুমান অনুযায়ী পরিবর্তন করবে না।\n9. Facebook Post-কে unnecessarily দীর্ঘ করবে না।\n\n\nFINAL QUALITY CONTROL\n\nFinal Facebook Post দেওয়ার আগে silently যাচাই করবে:\n\n1. এটি কি Final Blog Post-এর সঠিক Entry Point?\n2. Core problem কি aligned?\n3. Final angle কি aligned?\n4. Promise কি aligned?\n5. Hook কি aligned?\n6. Facebook Post কি complete solution প্রকাশ করেছে?\n7. Curiosity কি genuine?\n8. Duplication কি যথেষ্ট নিয়ন্ত্রিত?\n9. CTA কি Blog Post-এর দিকে নিয়ে যাচ্ছে?\n10. Blog URL কি সঠিকভাবে যোগ হয়েছে?\n\n\nINPUT\n\nFINAL EDITED BLOG POST:\n\n[এখানে আপনার manually edited Final Blog Post paste করুন]\n\n\nBLOG URL:\n\n[এখানে Blog Post-এর actual URL paste করুন]\n\n\nOUTPUT\n\nনিচের ক্রমে output দাও।\n\n1. Final Facebook Post\n\nসম্পূর্ণ final Facebook Post লিখবে।\n\n2. Final Alignment Check\n\nশুধু নিচের বিষয়গুলো সংক্ষেপে দেখাবে:\n\nCore problem alignment:\nFinal angle alignment:\nPromise alignment:\nCuriosity alignment:\nBlog CTA alignment:\n\nএই অংশে নতুন content লিখবে না।";
+            const prompt6Template = "Integrate the blog post link using [URL] into the Facebook post. Avoid a generic call to action and make it relevant to the blog post.";
+
+        function updatePrompts() {
+            const content = document.getElementById('inputContent').value;
+            const context = document.getElementById('inputContext').value;
+            const finalBlog = document.getElementById('inputFinalBlog').value;
+            const url = document.getElementById('inputUrl').value;
+
+            document.getElementById('prompt1').value =
+                prompt1Template.replace('[Content to find reader\'s questions]', content);
+
+            document.getElementById('prompt2').value =
+                prompt2Template.replace('[এখানে বিষয় / সমস্যা / keyword / audience / desired outcome / অন্যান্য প্রয়োজনীয় context দেওয়া হবে]', context);
+
+            document.getElementById('prompt3').value = prompt3Template;
+
+            document.getElementById('prompt4').value =
+                prompt4Template.replace('[এখানে বিষয় / সমস্যা / keyword / audience / desired outcome / অন্যান্য প্রয়োজনীয় context দেওয়া হবে]', context);
+
+            document.getElementById('prompt5').value =
+                prompt5Template
+                    .replace('[এখানে আপনার manually edited Final Blog Post paste করুন]', finalBlog)
+                    .replace('[এখানে Blog Post-এর actual URL paste করুন]', url);
+
+            document.getElementById('prompt6').value =
+                prompt6Template.replace('[URL]', url);
+        }
+
+        function resetInput(id) {
+            document.getElementById(id).value = '';
+            updatePrompts();
+        }
+
+        function copyPrompt(id, button) {
+            const outputBox = document.getElementById(id);
+            const originalText = button.textContent;
+
+            navigator.clipboard.writeText(outputBox.value).then(() => {
+                button.textContent = '✓ Copied!';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(() => {
+                outputBox.focus();
+                outputBox.select();
+                outputBox.setSelectionRange(0, 99999);
+
+                try {
+                    document.execCommand('copy');
+                    button.textContent = '✓ Copied!';
+                    button.classList.add('copied');
+
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.classList.remove('copied');
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                }
+            });
+        }
+
+        window.onload = updatePrompts;
+    </script>
+
+</body>
+</html>

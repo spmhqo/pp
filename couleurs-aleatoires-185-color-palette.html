@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Couleurs aléatoires 185 Color Palette</title>
+    <link rel="icon" href="spm.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf9f6;
+            --surface-color: #ffffff;
+            --border-color: #e2dfdc;
+            --text-main: #2c2a29;
+            --text-muted: #6e6963;
+            --accent: #1a1918;
+            --header-color: #245c57;
+            --font-serif: "Newsreader", Georgia, serif;
+            --font-sans: "Plus Jakarta Sans", Arial, sans-serif;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            padding: 40px 20px;
+            background: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .document-container {
+            width: min(100%, 860px);
+            margin: 0 auto;
+            padding: 48px 40px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, .02);
+        }
+
+        .doc-header {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .doc-title {
+            margin-bottom: 8px;
+            color: var(--header-color);
+            font-family: var(--font-serif);
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-weight: 600;
+            line-height: 1.12;
+        }
+
+        .doc-subtitle {
+            color: var(--text-muted);
+            font-size: .98rem;
+        }
+
+        .section-heading {
+            margin: 36px 0 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--border-color);
+            color: var(--accent);
+            font-family: var(--font-serif);
+            font-size: 1.35rem;
+            font-weight: 600;
+        }
+
+        .prompt-card {
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-color);
+        }
+
+        .prompt-title {
+            display: block;
+            margin-bottom: 12px;
+            color: var(--accent);
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .prompt-content {
+            overflow-x: auto;
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--surface-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            font-size: .96rem;
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        .doc-footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: .85rem;
+            text-align: center;
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 12px 8px; }
+            .document-container { padding: 28px 18px; }
+            .doc-header { margin-bottom: 30px; padding-bottom: 22px; }
+            .prompt-card { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <main class="document-container">
+        <header class="doc-header">
+            <h1 class="doc-title">Couleurs aléatoires 185 Color Palette</h1>
+            <p class="doc-subtitle">(to use in image)</p>
+        </header>
+
+        <section aria-labelledby="prompt-heading">
+            <h2 class="section-heading" id="prompt-heading">Prompt</h2>
+            <div class="prompt-card">
+                <span class="prompt-title">Color Palette Prompt</span>
+                <pre class="prompt-content">Use this Color Palette:
+
+Couleurs aléatoires 185 Color Palette
+
+Colors in Palette	
+Hex	RGB
+#26483c	(38,72,60)
+#fa72dc	(250,114,220)
+#3582be	(53,130,190)
+#d2da7e	(210,218,126)
+#5d8d7f	(93,141,127)</pre>
+            </div>
+        </section>
+
+        <footer class="doc-footer">
+            Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.
+        </footer>
+    </main>
+</body>
+</html>

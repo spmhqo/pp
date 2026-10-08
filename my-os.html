@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Operating System / অপারেটিং সিস্টেম</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #17212b;
+      --line: #25313c;
+      --paper: #ffffff;
+      --wash: #f3f7f8;
+      --accent: #0e6b70;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--wash);
+      color: var(--ink);
+      font-family: "Source Sans 3", Arial, sans-serif;
+    }
+
+    main {
+      width: min(100%, 1440px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: clamp(28px, 5vw, 72px) clamp(16px, 4vw, 56px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .title {
+      margin: 0 0 28px;
+      text-align: center;
+      font-size: clamp(1.45rem, 2.5vw, 2.15rem);
+      font-weight: 700;
+      letter-spacing: 0;
+      color: #102f38;
+    }
+
+    .bengali {
+      font-family: "Noto Sans Bengali", sans-serif;
+      font-weight: 600;
+    }
+
+    .title .bengali {
+      font-size: .86em;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+    }
+
+    table {
+      width: 100%;
+      min-width: 1040px;
+      border-collapse: collapse;
+      table-layout: fixed;
+      background: var(--paper);
+    }
+
+    col.item { width: 9.5%; }
+    col.product { width: 9%; }
+    col.standard { width: 9.5%; }
+    col.continuation { width: 8%; }
+    col.special { width: 9.5%; }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      vertical-align: top;
+      text-align: left;
+      font-size: 0.98rem;
+      line-height: 1.15;
+    }
+
+    th {
+      background: #e8f1f2;
+      font-weight: 700;
+      vertical-align: middle;
+    }
+
+    th:first-child,
+    td:first-child { background: #f7faf9; }
+
+    .label {
+      display: block;
+      font-weight: 600;
+    }
+
+    .translation {
+      display: block;
+      margin-top: 3px;
+      color: #31575b;
+      font-size: .84em;
+    }
+
+    .empty { height: 34px; }
+    .tall { height: 94px; }
+
+    @media (max-width: 640px) {
+      main { justify-content: flex-start; }
+      .title { text-align: left; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      main { display: block; width: 100%; padding: 0; }
+      .title { margin: 0 0 14px; }
+      .table-wrap { overflow: visible; border: 0; }
+      table { min-width: 0; }
+      th, td { padding: 5px 6px; font-size: 9pt; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1 class="title">Operating System <span class="bengali">/ অপারেটিং সিস্টেম</span></h1>
+
+    <div class="table-wrap" role="region" aria-label="Operating system table" tabindex="0">
+      <table>
+        <colgroup>
+          <col class="item">
+          <col class="product"><col class="product">
+          <col class="standard"><col class="standard"><col class="standard"><col class="standard"><col class="standard">
+          <col class="continuation"><col class="continuation">
+          <col class="special">
+        </colgroup>
+        <thead>
+          <tr>
+            <th rowspan="2"><span class="label">Items</span></th>
+            <th colspan="2"><span class="label">Product</span><span class="translation bengali">পণ্য</span></th>
+            <th rowspan="2"><span class="label">Promo Blog</span><span class="translation bengali">প্রচার ব্লগ</span></th>
+            <th rowspan="2"><span class="label">Promo SMP</span><span class="translation bengali">প্রচার এসএমপি</span></th>
+            <th rowspan="2"><span class="label">Spices</span><span class="translation bengali">মসলা</span></th>
+            <th rowspan="2"><span class="label">NISMS</span></th>
+            <th rowspan="2"><span class="label">CRM</span></th>
+            <th colspan="2"><span class="label">Continuation</span><span class="translation bengali">ধারাবাহিকতা</span></th>
+            <th rowspan="2"><span class="label">Special Content</span><span class="translation bengali">বিশেষ কনটেন্ট</span></th>
+          </tr>
+          <tr>
+            <th><span class="label">Paid</span><span class="translation bengali">পেইড</span></th>
+            <th><span class="label">Free</span><span class="translation bengali">ফ্রি</span></th>
+            <th><span class="label">Public ROQ of paid product</span><span class="translation bengali">পেইড পণ্যের পাবলিক আরওকিউ</span></th>
+            <th><span class="label">Private ROQ of paid product</span><span class="translation bengali">পেইড পণ্যের প্রাইভেট আরওকিউ</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="tall">
+            <td><span class="label">Type</span><span class="translation bengali">ধরন</span></td>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+          </tr>
+          <tr>
+            <td><span class="label">Source</span><span class="translation bengali">উৎস</span></td>
+            <td><span class="label">Issue / Task</span><span class="translation bengali">ইস্যু / কাজ</span></td>
+            <td><span class="label">Gateway Problem</span><span class="translation bengali">গেটওয়ে সমস্যা</span></td>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+          </tr>
+          <tr>
+            <td><span class="label">Inputs</span><span class="translation bengali">ইনপুট</span></td>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            <td><span class="label">Rivers Case Study</span><span class="translation bengali">রিভার কেস স্টাডি</span></td>
+          </tr>
+          <tr>
+            <td><span class="label">Tools</span><span class="translation bengali">টুলস</span></td>
+            <td></td>
+            <td><span class="label">4 Report Tools</span><span class="translation bengali">৪টি রিপোর্ট টুলস</span></td>
+            <td><span class="label">ICT</span><span class="translation bengali">আইসিটি</span></td>
+            <td><span class="label">ICT</span><span class="translation bengali">আইসিটি</span></td>
+            <td></td>
+            <td><span class="label">NISMS</span></td>
+            <td></td><td></td><td></td><td></td>
+          </tr>
+          <tr class="empty">
+            <td><span class="label">Process</span><span class="translation bengali">প্রক্রিয়া</span></td>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+          </tr>
+          <tr class="empty">
+            <td><span class="label">AI Prompts</span><span class="translation bengali">এআই প্রম্পট</span></td>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

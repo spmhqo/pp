@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Siva's Project Plan</title>
+  <style>
+    :root {
+      /* COLOUR PALETTE FROM RR-TEMPLATE */
+      --primary: #204d4f;      /* Deep Teal - Primary */
+      --secondary: #426a6c;    /* Muted Teal - Secondary */
+      --accent: #739395;       /* Sage Teal - Accent */
+      --border-clr: #a9c1c2;   /* Soft Mint - Borders */
+      --light-bg: #dbeeef;     /* Pale Mint - Background */
+      
+      --ink: #1e2b2c;
+      --muted: #426a6c;
+      --paper: #ffffff;
+      --page-bg: var(--light-bg);
+      --line: var(--border-clr);
+      --shadow: 0 10px 30px rgba(32, 77, 79, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--page-bg);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    .page-wrap {
+      width: min(900px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 40px 0 80px;
+    }
+
+    /* HERO HEADER */
+    .hero {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-clr);
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--primary);
+    }
+
+    .subtitle {
+      margin: 0 auto;
+      font-size: 16px;
+      max-width: 700px;
+      color: var(--secondary);
+      line-height: 1.6;
+      font-weight: 600;
+    }
+
+    /* GROUP HEADERS */
+    .group-header {
+      margin: 40px 0 20px;
+      padding-left: 15px;
+      border-left: 4px solid var(--accent);
+    }
+    .group-header h2 { 
+      margin: 0; 
+      font-size: 20px; 
+      color: var(--primary); 
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* GRID FOR BUTTONS */
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    /* BUTTON STYLES */
+    .button {
+      appearance: none;
+      border: 1px solid var(--border-clr);
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      background: var(--paper);
+      color: var(--primary);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .button:hover {
+      background: var(--primary);
+      color: #fff;
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--accent);
+    }
+
+    @media (max-width: 600px) {
+      .tool-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-wrap">
+    <header class="hero">
+      <h1>Siva's Project Plan Tools</h1>
+      <p class="subtitle">Quick Access to All Utilities</p>
+    </header>
+
+    <!-- DOMAIN SECTION -->
+    <div class="group-header">
+      <h2>Domain</h2>
+    </div>
+    <div class="tool-grid">
+      <a class="button" href="find-topic-keyword-niche.html" target="_blank" rel="noopener">Find Topic Niche</a>
+      <a class="button" href="find-buyer-keywords.html" target="_blank" rel="noopener">Find Buyer's Keywords</a>
+      <a class="button" href="project-plan.html" target="_blank" rel="noopener">Project Plan</a>
+      <a class="button" href="my-os.html" target="_blank" rel="noopener">Operating System</a>
+
+    </div>
+
+    <!-- IMPORTANT CONTENT SECTION -->
+    <div class="group-header">
+      <h2>Important Conten Tools</h2>
+    </div>
+    <div class="tool-grid">
+      <a class="button" href="answer-readers-question.html" target="_blank" rel="noopener">Answer Reader's Question</a>
+      <a class="button" href="arqfi.html" target="_blank" rel="noopener">Answer Reader's Question Feature Images</a>
+      <a class="button" href="readymade-ecover-prompt-3-prompts.html" target="_blank" rel="noopener">Readymade Ecover Prompt</a>
+
+    </div>
+
+    <!-- Policy SECTION -->
+    <div class="group-header">
+      <h2>Policy</h2>
+    </div>
+    <div class="tool-grid">
+      <a class="button" href="blog-facebook-image-relationship.html" target="_blank" rel="noopener">Blog, Facebook Post এবং Image-এর সম্পর্ক</a>
+
+    </div>
+
+    <!-- IMAGE SECTION -->
+    <div class="group-header">
+      <h2>Image</h2>
+    </div>
+    <div class="tool-grid">
+      <a class="button" href="visual-meaning-detector.html" target="_blank" rel="noopener">Visual Meaning Detector</a>
+
+    </div>
+
+    <!-- COLOR PALETTE SECTION -->
+    <div class="group-header">
+      <h2>Color Palette</h2>
+    </div>
+    <div class="tool-grid">
+      <a class="button" href="couleurs-aleatoires-185-color-palette.html" target="_blank" rel="noopener">Couleurs aléatoires 185</a>
+
+    </div>
+
+    <!-- UTILITY SECTION -->
+    <div class="group-header">
+      <h2>Utility Tools</h2>
+    </div>
+    <div class="tool-grid">
+      <a class="button" href="links.html" target="_blank" rel="noopener">Link Generator</a>
+      <a class="button" href="reset-a-prompt.html" target="_blank" rel="noopener">Reset A Prompt</a>
+
+    </div>
+
+    <footer>
+      Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.
+    </footer>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Answer Reader's Question Feature Images</title>
+    <link rel="icon" href="spm.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,0,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color:#faf9f6; --surface-color:#ffffff; --border-color:#e2dfdc;
+            --border-focus:#706b63; --text-main:#2c2a29; --text-muted:#6e6963;
+            --accent:#1a1918; --accent-hover:#383532; --success:#2e7d32;
+            --header-color:#4338ca; --font-serif:'Newsreader',serif;
+            --font-sans:'Plus Jakarta Sans',sans-serif;
+        }
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:var(--font-sans);background:var(--bg-color);color:var(--text-main);
+            line-height:1.6;padding:40px 20px;-webkit-font-smoothing:antialiased}
+        .document-container{max-width:760px;margin:0 auto;background:var(--surface-color);
+            border:1px solid var(--border-color);border-radius:12px;padding:48px 40px;
+            box-shadow:0 4px 24px rgba(0,0,0,.02)}
+        .doc-header{text-align:center;margin-bottom:40px;border-bottom:1px solid var(--border-color);padding-bottom:30px}
+        .doc-title{font-family:var(--font-serif);font-size:2.2rem;font-weight:600;
+            letter-spacing:-.02em;color:var(--header-color);margin-bottom:8px}
+        .doc-subtitle{font-size:.95rem;color:var(--text-muted);font-weight:400}
+        .section-heading{font-family:var(--font-serif);font-size:1.3rem;font-weight:600;color:var(--accent);
+            margin:36px 0 16px;padding-bottom:8px;border-bottom:1px dashed var(--border-color)}
+        .prompt-card{margin-bottom:24px;background:var(--bg-color);border:1px solid var(--border-color);
+            border-radius:8px;padding:20px}
+        .prompt-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+        .prompt-title{font-family:var(--font-serif);font-size:1.1rem;font-weight:600;color:var(--accent)}
+        .prompt-preview{width:100%;min-height:180px;background:var(--surface-color);
+            border:1px solid var(--border-color);border-radius:6px;padding:16px;font-family:var(--font-sans);
+            font-size:.9rem;color:var(--text-main);line-height:1.55;resize:vertical;white-space:pre-wrap;margin-bottom:12px}
+        .copy-btn{background:var(--accent);color:#fff;border:none;padding:10px 20px;font-family:var(--font-sans);
+            font-size:.85rem;font-weight:500;border-radius:6px;cursor:pointer;transition:background .2s ease,transform .1s ease}
+        .copy-btn:hover{background:var(--accent-hover)} .copy-btn:active{transform:translateY(1px)}
+        .copy-btn.copied{background:var(--success)}
+        .doc-footer{text-align:center;margin-top:50px;font-size:.85rem;color:var(--text-muted);
+            border-top:1px solid var(--border-color);padding-top:20px}
+        @media(max-width:640px){body{padding:12px 8px}.document-container{padding:24px 16px}
+            .doc-title{font-size:1.8rem}.doc-subtitle{font-size:.88rem}
+            .prompt-card{padding:16px;margin-bottom:20px}.prompt-preview{min-height:260px;font-size:.88rem;padding:14px}
+            .copy-btn{width:100%}}
+    </style>
+</head>
+<body>
+<div class="document-container">
+    <header class="doc-header">
+        <h1 class="doc-title">Answer Reader's Question Feature Images</h1>
+        <p class="doc-subtitle">(for blog post and Facebook post)</p>
+    </header>
+    <section>
+        <h2 class="section-heading">Prompts</h2>
+        <div class="prompt-card">
+            <div class="prompt-header"><span class="prompt-title">Prompt#1</span></div>
+            <textarea id="prompt1" class="prompt-preview" readonly>Answer the following prompt in Bengali (India).
+
+Rules:
+- Use only Bengali (India).
+- Always address the reader as "আপনি".
+- Never use "তুমি" or "তুই".
+- Use a natural Kolkata-style conversational tone.
+- Use natural, modern Bengali (India).
+- Avoid Bangladeshi vocabulary, spelling, and expressions.
+
+PROMPT
+
+Based on the final blog post you just created and the matching reader-facing AI prompt you just created directly above in this conversation, generate one best-and-final finished image that visually represents that content. Treat the content already in this conversation as the complete source of truth. Don't ask me to repeat, paste, or restate the content idea, title, description, audience, topic, or strategic direction. Do not give me an image prompt, concept, explanation, variation set, or design notes. Generate the actual image.
+
+PRIMARY JOB: Create one jaw-dropping social-media graphic that makes people stop scrolling and want to read the content. The image should capture the strongest idea, mechanism, distinction, tension, or payoff from the finished content and translate it into a visually unforgettable graphic.
+
+FORMAT: Generate the image in a 4:5 portrait format optimized for social media and mobile viewing. It should feel natively suited for platforms like Facebook, Instagram, LinkedIn, and X while remaining easy to read on a phone.
+
+VISUAL STANDARD: Make it feel premium, polished, bold, modern, high-contrast, and emotionally compelling. It should look like a high-end editorial social graphic or premium promotional poster, not a generic template, low-effort quote card, cheesy stock image, or cluttered infographic. Use strong composition, clear visual hierarchy, clean spacing, dramatic depth, and a central focal point that instantly communicates the core idea.
+
+TEXT USAGE: Keep on-image text minimal and powerful. Use the exact content title as the main headline unless a shorter version is needed for visual impact, in which case preserve the meaning. You may add one short supporting line if it strengthens the image, but keep the total text tight, readable, and mobile-friendly. The text must be crisp, prominent, and easy to read on a phone.
+
+CREATIVE DIRECTION: Build the visual around a compelling metaphor, scene, object, or dramatic visual situation that expresses the idea rather than merely decorating it. If the content suggests a strong before-versus-after contrast, tension, hidden mistake, overlooked opportunity, or diagnostic insight, show that visually. If a human figure helps, use one. If a symbolic or object-based concept is stronger, use that instead. Make the image feel intelligent and emotionally charged, not random.
+
+COLOR PALETTE:
+Use this exact 5-color palette as the primary visual system:
+
+• #a4efde | Light Mint: dominant background and main breathing space
+• #6ccd9c | Medium Mint Green: secondary surfaces, soft gradients, depth and supporting areas
+• #3da990 | Deep Teal: primary dark colour for headlines, typography, structural elements and strong visual anchors
+• #3caf2a | Bright Green: selective accent colour for emphasis, highlights and attention points
+• #7ebd2e | Lime Green: minimal secondary highlight for subtle tonal variation
+
+COLOR HIERARCHY:
+Use the palette with clear dominance rather than equal distribution. Let Light Mint dominate the composition, Medium Mint Green create secondary depth, Deep Teal provide the strongest contrast and visual structure, Bright Green attract attention to selected focal elements, and Lime Green remain a very limited highlight.
+
+APPROXIMATE USAGE:
+60% Light Mint
+25% Medium Mint Green
+10% Deep Teal
+4% Bright Green
+1% Lime Green
+
+VISUAL PRINCIPLE:
+Create a clean, premium, fresh and intelligent colour system. Use the light mint tones to create spaciousness and softness, Deep Teal to establish readability and authority, and the brighter greens only as controlled attention accents. Maintain strong contrast between light backgrounds and Deep Teal typography. Avoid using all five colours with equal visual weight.
+
+OVERALL COLOUR FEEL:
+Fresh mint + sophisticated teal + restrained energetic green. Premium, modern, friendly and polished, but never childish, neon-heavy, oversaturated or visually cluttered.
+
+DESIGN RULES:
+- Make it instantly attention-grabbing in a crowded feed
+- Favor one dominant idea over clutter or too many elements
+- Use bold typography with excellent contrast and spacing
+- Keep the layout clean and easy to scan on mobile
+- Avoid tiny text, weak contrast, generic icons, bland backgrounds, and obvious stock-photo energy
+- Don't include logos, watermarks, fake UI screenshots, or unnecessary platform branding
+- Don't turn it into a busy step-by-step infographic unless the content absolutely demands it
+- The final image must feel like something a serious marketer would immediately post
+
+FINAL OUTPUT RULE: Return only the finished image. Don't return text commentary, image prompts, captions, explanations, or multiple options unless needed internally to complete the image generation. The goal is one freaking stunning finished image.</textarea>
+            <button class="copy-btn" onclick="copyPrompt('prompt1', this)">Copy to Clipboard</button>
+        </div>
+        <div class="prompt-card">
+            <div class="prompt-header"><span class="prompt-title">Prompt#2</span></div>
+            <textarea id="prompt2" class="prompt-preview" readonly>অনুগ্রহ করে আগের Authority Content-এর জন্য তৈরি করা Image-টিকে visual reference হিসেবে নিয়ে 16:9 landscape feature image তৈরি করে দাও।</textarea>
+            <button class="copy-btn" onclick="copyPrompt('prompt2', this)">Copy to Clipboard</button>
+        </div>
+    </section>
+    <footer class="doc-footer">
+        Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.
+    </footer>
+</div>
+<script>
+function copyPrompt(id,button){
+    const outputBox=document.getElementById(id),originalText=button.textContent;
+    navigator.clipboard.writeText(outputBox.value).then(()=>{
+        button.textContent='✓ Copied!';button.classList.add('copied');
+        setTimeout(()=>{button.textContent=originalText;button.classList.remove('copied')},2000);
+    }).catch(()=>{
+        outputBox.focus();outputBox.select();outputBox.setSelectionRange(0,99999);
+        try{document.execCommand('copy');button.textContent='✓ Copied!';button.classList.add('copied');
+            setTimeout(()=>{button.textContent=originalText;button.classList.remove('copied')},2000)}catch(err){console.error('Failed to copy text: ',err)}
+    });
+}
+</script>
+</body>
+</html>

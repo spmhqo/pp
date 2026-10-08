@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog, Facebook Post এবং Image-এর সম্পর্ক</title>
+    <link rel="icon" href="spm.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg:#faf9f6; --surface:#fff; --border:#e2dfdc; --text:#2c2a29; --muted:#6e6963; --accent:#1a1918; --hover:#383532; --success:#2e7d32; --header:#4338ca; --serif:'Newsreader',serif; --sans:'Plus Jakarta Sans',sans-serif; }
+        * { box-sizing:border-box; margin:0; padding:0; }
+        body { background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.6; padding:40px 20px; -webkit-font-smoothing:antialiased; }
+        .document-container { max-width:760px; margin:auto; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:48px 40px; box-shadow:0 4px 24px rgba(0,0,0,.02); }
+        .doc-header { text-align:center; margin-bottom:40px; padding-bottom:30px; border-bottom:1px solid var(--border); }
+        .doc-title { color:var(--header); font:600 2.2rem var(--serif); letter-spacing:-.02em; margin-bottom:8px; }
+        .doc-subtitle { color:var(--muted); font-size:.95rem; }
+        .section-heading { color:var(--accent); font:600 1.3rem var(--serif); margin:36px 0 16px; padding-bottom:8px; border-bottom:1px dashed var(--border); }
+        .output-card { padding:24px; background:var(--bg); border:1px solid var(--border); border-radius:8px; }
+        .output-title { display:block; color:var(--accent); font:600 1.1rem var(--serif); margin-bottom:12px; }
+        .prompt-preview { width:100%; min-height:420px; padding:16px; background:var(--surface); border:1px solid var(--border); border-radius:6px; color:var(--text); font:.93rem/1.55 var(--sans); resize:vertical; white-space:pre-wrap; }
+        .prompt-preview:focus { outline:none; border-color:#706b63; box-shadow:0 0 0 3px rgba(112,107,99,.1); }
+        .copy-btn { margin-top:16px; border:0; border-radius:6px; cursor:pointer; color:#fff; background:var(--accent); font:500 .85rem var(--sans); padding:10px 20px; transition:background .2s ease,transform .1s ease; }
+        .copy-btn:hover { background:var(--hover); transform:translateY(-1px); }
+        .copy-btn.copied { background:var(--success); }
+        .doc-footer { margin-top:50px; padding-top:20px; border-top:1px solid var(--border); color:var(--muted); font-size:.85rem; text-align:center; }
+        @media (max-width:640px) { body{padding:12px 8px}.document-container{padding:24px 16px}.doc-title{font-size:1.8rem} }
+    </style>
+</head>
+<body>
+    <main class="document-container">
+        <header class="doc-header">
+            <h1 class="doc-title">Blog, Facebook Post এবং Image-এর সম্পর্ক</h1>
+            <p class="doc-subtitle">(in content distribution)</p>
+        </header>
+
+        <section>
+            <h2 class="section-heading">Prompt</h2>
+            <div class="output-card">
+                <label class="output-title" for="promptOutput">Prompt</label>
+                <textarea id="promptOutput" class="prompt-preview" readonly></textarea>
+                <button class="copy-btn" type="button" onclick="copyPrompt(this)">Copy to Clipboard</button>
+            </div>
+        </section>
+
+        <footer class="doc-footer">Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.</footer>
+    </main>
+
+    <script>
+        const prompt = `Blog, Facebook Post এবং Image-এর সম্পর্ক:
+
+Blog
+“আপনি সমস্যাটি বুঝুন এবং এর সমাধান কীভাবে করবেন তা শিখুন।”
+Facebook
+“আপনি সমস্যাটি চিনুন এবং বুঝুন যে এর উত্তরটি আপনার জানা দরকার।”
+Image
+“এক নজরে বুঝুন—এই content-এ এমন কিছু আছে যা আপনার জন্য relevant।”
+
+অর্থাৎ তিনটির কাজ তিন রকম।
+Blog = Understanding + Solution
+Facebook = Entry + Curiosity
+Image = Attention + Visual Meaning (Never ask the image to summarize the content. Ask it to visualize the content's strongest meaning).`;
+
+        document.getElementById('promptOutput').value = prompt;
+
+        async function copyPrompt(button) {
+            const output = document.getElementById('promptOutput');
+
+            try {
+                await navigator.clipboard.writeText(output.value);
+            } catch (error) {
+                output.select();
+                document.execCommand('copy');
+                window.getSelection().removeAllRanges();
+            }
+
+            const original = button.textContent;
+            button.textContent = '✓ Copied!';
+            button.classList.add('copied');
+
+            setTimeout(() => {
+                button.textContent = original;
+                button.classList.remove('copied');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

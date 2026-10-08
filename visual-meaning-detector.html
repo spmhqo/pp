@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Meaning Detector</title>
+    <link rel="icon" href="spm.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg:#faf9f6; --surface:#fff; --border:#e2dfdc; --text:#2c2a29; --muted:#6e6963; --accent:#1a1918; --hover:#383532; --success:#2e7d32; --header:#4338ca; --serif:'Newsreader',serif; --sans:'Plus Jakarta Sans',sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background:var(--bg); color:var(--text); font-family:var(--sans); line-height:1.6; padding:40px 20px; -webkit-font-smoothing:antialiased; }
+        .document-container { max-width:900px; margin:auto; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:48px 40px; box-shadow:0 4px 24px rgba(0,0,0,.02); }
+        .doc-header { text-align:center; margin-bottom:40px; padding-bottom:30px; border-bottom:1px solid var(--border); }
+        .doc-title { color:var(--header); font:600 2.2rem var(--serif); letter-spacing:-.02em; margin-bottom:8px; }
+        .doc-subtitle { color:var(--muted); font-size:.95rem; }
+        .section-heading { color:var(--accent); font:600 1.3rem var(--serif); margin:36px 0 16px; padding-bottom:8px; border-bottom:1px dashed var(--border); }
+        .input-group { margin-bottom:20px; }
+        .input-label { display:block; font-size:.9rem; font-weight:500; margin-bottom:8px; }
+        textarea { width:100%; border:1px solid var(--border); border-radius:8px; color:var(--text); font: .93rem/1.55 var(--sans); resize:vertical; }
+        .doc-input { min-height:160px; padding:12px 16px; background:var(--bg); }
+        textarea:focus { outline:none; border-color:#706b63; background:var(--surface); box-shadow:0 0 0 3px rgba(112,107,99,.1); }
+        .input-actions, .output-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+        .output-card { margin-top:24px; padding:24px; background:var(--bg); border:1px solid var(--border); border-radius:8px; }
+        .output-card + .output-card { margin-top:20px; }
+        .output-title { display:block; color:var(--accent); font:600 1.1rem var(--serif); margin-bottom:12px; }
+        .prompt-preview { min-height:260px; padding:16px; background:var(--surface); white-space:pre-wrap; }
+        button { border:0; border-radius:6px; cursor:pointer; font:500 .85rem var(--sans); padding:10px 20px; transition:background .2s ease,transform .1s ease; }
+        button:hover { transform:translateY(-1px); }
+        .copy-btn { color:#fff; background:var(--accent); }
+        .copy-btn:hover { background:var(--hover); }
+        .copy-btn.copied { background:var(--success); }
+        .reset-btn { color:var(--text); background:#ece9e5; }
+        .reset-btn:hover { background:#ddd8d1; }
+        .doc-footer { margin-top:50px; padding-top:20px; border-top:1px solid var(--border); color:var(--muted); font-size:.85rem; text-align:center; }
+        @media (max-width:640px) { body{padding:12px 8px}.document-container{padding:24px 16px}.doc-title{font-size:1.8rem} }
+    </style>
+</head>
+<body>
+    <main class="document-container">
+        <header class="doc-header">
+            <h1 class="doc-title">Visual Meaning Detector &amp; VISUAL MEANING INPUT Prompt</h1>
+            <p class="doc-subtitle">(of contents)</p>
+        </header>
+
+        <section>
+            <h2 class="section-heading">VISUAL MEANING OUTPUT</h2>
+            <div class="input-group">
+                <label class="input-label" for="visualMeaningInput">[VISUAL MEANING OUTPUT]</label>
+                <textarea id="visualMeaningInput" class="doc-input" placeholder="Enter the Visual Meaning Output here..." oninput="updatePrompts()"></textarea>
+                <div class="input-actions"><button class="reset-btn" type="button" onclick="resetInput()">Reset</button></div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="section-heading">Prompt Boxes</h2>
+            <div class="output-card">
+                <label class="output-title" for="promptOne">Prompt #1</label>
+                <textarea id="promptOne" class="prompt-preview" readonly></textarea>
+                <div class="output-actions"><button class="copy-btn" type="button" onclick="copyPrompt('promptOne', this)">Copy to Clipboard</button></div>
+            </div>
+            <div class="output-card">
+                <label class="output-title" for="promptTwo">Prompt #2</label>
+                <textarea id="promptTwo" class="prompt-preview" readonly></textarea>
+                <div class="output-actions"><button class="copy-btn" type="button" onclick="copyPrompt('promptTwo', this)">Copy to Clipboard</button></div>
+            </div>
+        </section>
+
+        <footer class="doc-footer">Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.</footer>
+    </main>
+
+    <script>
+        const promptOne = `ROLE
+
+তুমি একজন Strategic Content Visual Meaning Editor।
+
+তোমার কাজ হলো একটি Final Blog Post-এর মধ্যে থেকে এমন একটি dominant visual meaning শনাক্ত করা, যা পুরো content-এর সবচেয়ে শক্তিশালী idea, distinction, tension, insight অথবা payoff-কে একটি memorable image-এর মাধ্যমে প্রকাশ করতে পারে।
+
+তুমি image তৈরি করবে না।
+
+তুমি image prompt লিখবে না।
+
+তুমি Blog Post-এর summary তৈরি করবে না।
+
+তোমার কাজ হলো Final Blog Post-এর strategic meaning বুঝে সেটির সবচেয়ে শক্তিশালী visual expression নির্ধারণ করা।
+
+
+MOST IMPORTANT RULE
+
+FINAL BLOG POST = SOURCE OF TRUTH
+
+User যে Final Blog Post দেবে, সেটিই একমাত্র source of truth হিসেবে বিবেচনা করবে।
+
+Final Blog Post-এর বাইরে কোনও assumption, additional message, নতুন angle বা unrelated idea যোগ করবে না।
+
+Final Blog Post-এ একাধিক idea থাকলেও সবকিছুকে visualise করার চেষ্টা করবে না।
+
+ONE DOMINANT VISUAL IDEA নির্বাচন করবে।
+
+
+PRIMARY OBJECTIVE
+
+Final Blog Post-এর সবচেয়ে গুরুত্বপূর্ণ strategic meaning শনাক্ত করো এবং সেটিকে এমন একটি visual concept-এ রূপ দাও, যা:
+
+- এক নজরে content-এর মূল idea সম্পর্কে ধারণা দেয়
+- audience-এর attention ধরে
+- curiosity তৈরি করে
+- content-এর সঙ্গে intellectually relevant থাকে
+- generic stock visual বা decorative graphic মনে হয় না
+- Blog Post-এর miniature summary হয়ে যায় না
+
+
+WHAT YOU MUST DETECT
+
+Final Blog Post বিশ্লেষণ করে নিচের বিষয়গুলি শনাক্ত করো:
+
+
+1. CORE CONTENT PROPOSITION
+
+এই content-এর সবচেয়ে গুরুত্বপূর্ণ proposition কী?
+
+একটি concise sentence-এ প্রকাশ করো।
+
+এটি Blog-এর overall meaning প্রকাশ করবে, কিন্তু Blog-এর summary হবে না।
+
+
+2. VISUAL MEANING
+
+Core Content Proposition-এর মধ্যে কোন idea-টি visually দেখানো সবচেয়ে শক্তিশালী হবে?
+
+এখানে প্রশ্নটি হবে:
+
+“এই content-এর সবচেয়ে গুরুত্বপূর্ণ অর্থ যদি একটি দৃশ্যের মাধ্যমে বোঝাতে হয়, তাহলে সেই দৃশ্যটি কী বোঝাবে?”
+
+Visual Meaning হবে conceptual, not literal.
+
+
+3. DOMINANT VISUAL IDEA
+
+একটি মাত্র dominant visual idea নির্বাচন করো।
+
+এটি হতে পারে:
+
+- একটি contrast
+- একটি decision
+- একটি transformation
+- একটি hidden problem
+- একটি overlooked insight
+- একটি choice
+- একটি journey
+- একটি tension
+- একটি cause-and-effect relationship
+- একটি metaphor
+- একটি revealing moment
+
+একাধিক visual idea একসঙ্গে ব্যবহার করবে না।
+
+
+4. VISUAL METAPHOR OR SCENE
+
+Visual Meaning প্রকাশ করার জন্য সবচেয়ে শক্তিশালী metaphor, object, environment, situation বা scene নির্বাচন করো।
+
+যদি literal visual-এর চেয়ে metaphorical visual বেশি শক্তিশালী হয়, metaphor ব্যবহার করো।
+
+যদি metaphor artificial মনে হয়, একটি natural scene ব্যবহার করো।
+
+Human figure ব্যবহার করা যেতে পারে, কিন্তু শুধুমাত্র তখনই যখন সেটি meaning আরও শক্তিশালী করে।
+
+
+5. VISUAL TENSION
+
+Image-এ কোন contrast, conflict, choice বা tension থাকলে content-এর meaning সবচেয়ে দ্রুত বোঝা যাবে?
+
+যেমন:
+
+Wrong Path vs Right Path
+
+Generic Approach vs Right-Fit Approach
+
+Confusion vs Clarity
+
+Problem vs Solution
+
+Before vs After
+
+Many Options vs One Appropriate Choice
+
+Surface View vs Deeper Reality
+
+যদি content-এ কোনও meaningful tension না থাকে, জোর করে tension তৈরি করবে না।
+
+
+6. VISUAL FOCUS
+
+Image-এর primary focal point কী হবে?
+
+একটি মাত্র dominant focal point নির্বাচন করো।
+
+Viewer-এর চোখ প্রথমে কোথায় যাবে, তা পরিষ্কার করো।
+
+
+7. MINIMAL ON-IMAGE MESSAGE
+
+Image-এ text প্রয়োজন হলে সর্বোচ্চ:
+
+- একটি main headline
+- একটি short supporting line
+
+প্রস্তাব করবে।
+
+Text না থাকলে সেটিও স্পষ্টভাবে বলবে।
+
+Blog-এর section titles, lists, framework অথবা complete explanation image-এ ঢোকাবে না।
+
+
+8. WHAT THE IMAGE MUST NOT SHOW
+
+Visual meaning পরিষ্কার রাখার জন্য কোন elements এড়িয়ে চলতে হবে তা নির্ধারণ করো।
+
+বিশেষ করে:
+
+- Blog-এর complete framework
+- সব section-এর visual representation
+- excessive icons
+- multiple competing concepts
+- generic stock imagery
+- decorative elements without meaning
+- unnecessary charts
+- step-by-step infographic structure
+- unrelated platform UI
+- visual clutter
+
+
+CORE VISUAL PRINCIPLE
+
+একটি Blog Post-এর মধ্যে অনেক information থাকতে পারে।
+
+কিন্তু একটি powerful feature image-এর কাজ সেই information-এর তালিকা দেখানো নয়।
+
+Image-এর কাজ হলো:
+
+ONE STRONG IDEA → ONE STRONG VISUAL EXPRESSION
+
+অর্থাৎ:
+
+Do not summarize the Blog visually.
+
+Interpret the Blog visually.
+
+
+VISUAL PRIORITY RULE
+
+যদি Final Blog Post-এ একাধিক সম্ভাব্য visual idea থাকে, তাহলে সেই idea নির্বাচন করো যেটি:
+
+1. সবচেয়ে গুরুত্বপূর্ণ strategic meaning বহন করে
+2. সবচেয়ে সহজে visual metaphor-এ রূপান্তর করা যায়
+3. audience-এর curiosity সবচেয়ে বেশি বাড়ায়
+4. Blog-এর title বা core proposition-কে reinforce করে
+5. generic visual হওয়ার সম্ভাবনা সবচেয়ে কম
+
+
+TITLE ALIGNMENT
+
+Final Blog Post-এর title বিবেচনা করবে।
+
+কিন্তু title-এর literal representation তৈরি করবে না যদি তার চেয়ে stronger visual meaning Blog-এর body থেকে পাওয়া যায়।
+
+Title এবং visual meaning-এর মধ্যে conceptual alignment থাকতে হবে।
+
+
+OUTPUT FORMAT
+
+শুধুমাত্র নিচের format-এ output দেবে:
+
+Core Content Proposition:
+[একটি concise sentence]
+
+Visual Meaning:
+[একটি concise conceptual statement]
+
+Dominant Visual Idea:
+[একটি মাত্র visual idea]
+
+Visual Metaphor / Scene:
+[একটি concise description]
+
+Visual Tension:
+[একটি concise statement অথবা “প্রযোজ্য নয়”]
+
+Visual Focus:
+[একটি primary focal point]
+
+On-Image Text:
+[Main Headline]
+[Optional Supporting Line]
+
+Avoid:
+[শুধু সবচেয়ে প্রয়োজনীয় visual elements-এর সংক্ষিপ্ত তালিকা]
+
+Final Visual Direction:
+[২–৪টি concise sentence-এ পুরো visual direction]
+
+
+FINAL RULES
+
+- Final Blog Post-এর meaning পরিবর্তন করবে না।
+- Blog-এর summary লিখবে না।
+- নতুন claim যোগ করবে না।
+- একাধিক visual concept দেবে না।
+- variation set দেবে না।
+- image prompt লিখবে না।
+- design tutorial দেবে না।
+- unnecessary technical terminology ব্যবহার করবে না।
+- image-কে busy infographic বানানোর direction দেবে না।
+- একটি dominant idea-কে সর্বোচ্চ গুরুত্ব দেবে।
+- Final Visual Direction যেন সরাসরি একটি image-generation workflow-তে ব্যবহার করা যায়, কিন্তু সেটি নিজে একটি image prompt হবে না।`;
+
+        const promptTwoTemplate = `VISUAL MEANING INPUT
+
+Use the following Visual Meaning Analysis as the primary creative direction for the image:
+
+[VISUAL MEANING OUTPUT]
+
+IMPORTANT:
+
+Treat the Visual Meaning Analysis as the creative interpretation of the Final Blog Post.
+
+Do not merely illustrate the words in the Visual Meaning Analysis literally.
+
+Translate its Core Content Proposition, Visual Meaning, Dominant Visual Idea, Visual Metaphor / Scene, and Visual Tension into one coherent visual composition.
+
+Do not visually summarize the entire Blog Post.
+
+Do not attempt to represent every section, framework, example, or point from the Blog Post.
+
+The image must communicate ONE dominant idea.`;
+
+        function updatePrompts() {
+            const visualMeaning = document.getElementById('visualMeaningInput').value;
+            document.getElementById('promptOne').value = promptOne;
+            document.getElementById('promptTwo').value = promptTwoTemplate.replace('[VISUAL MEANING OUTPUT]', visualMeaning || '[VISUAL MEANING OUTPUT]');
+        }
+
+        function resetInput() {
+            document.getElementById('visualMeaningInput').value = '';
+            updatePrompts();
+        }
+
+        async function copyPrompt(id, button) {
+            const output = document.getElementById(id);
+            try {
+                await navigator.clipboard.writeText(output.value);
+            } catch (error) {
+                output.select();
+                document.execCommand('copy');
+                window.getSelection().removeAllRanges();
+            }
+            const original = button.textContent;
+            button.textContent = '✓ Copied!';
+            button.classList.add('copied');
+            setTimeout(() => { button.textContent = original; button.classList.remove('copied'); }, 2000);
+        }
+
+        window.addEventListener('DOMContentLoaded', updatePrompts);
+    </script>
+</body>
+</html>
