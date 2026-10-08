@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find The Gateway Problem - Prompt Workspace</title>
+    <link rel="icon" href="spm.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf9f6;
+            --surface-color: #ffffff;
+            --border-color: #e2dfdc;
+            --border-focus: #706b63;
+            --text-main: #2c2a29;
+            --text-muted: #6e6963;
+            --accent: #1a1918;
+            --accent-hover: #383532;
+            --success: #2e7d32;
+            --header-color: #4338ca;
+            --font-serif: 'Newsreader', serif;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 40px 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .document-container {
+            max-width: 760px;
+            margin: 0 auto;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 48px 40px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
+        }
+
+        /* Header Styles */
+        .doc-header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 30px;
+        }
+
+        .doc-title {
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--header-color);
+            margin-bottom: 8px;
+        }
+
+        .doc-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        /* Section Layout */
+        .section-heading {
+            font-family: var(--font-serif);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 36px 0 16px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .input-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .reset-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .reset-btn:hover {
+            background: var(--border-color);
+            color: var(--text-main);
+        }
+
+        .doc-input {
+            width: 100%;
+            padding: 12px 16px;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            color: var(--text-main);
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            resize: vertical;
+            min-height: 80px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .doc-input:focus {
+            outline: none;
+            border-color: var(--border-focus);
+            background: var(--surface-color);
+            box-shadow: 0 0 0 3px rgba(112, 107, 99, 0.1);
+        }
+
+        /* Output Box Styling */
+        .output-card {
+            margin-top: 30px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .output-title {
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .prompt-preview {
+            width: 100%;
+            min-height: 180px;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 16px;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            color: var(--text-main);
+            line-height: 1.5;
+            resize: vertical;
+            white-space: pre-wrap;
+            margin-bottom: 16px;
+        }
+
+        .copy-btn {
+            background: var(--accent);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .copy-btn.copied {
+            background: var(--success);
+        }
+
+        /* Footer */
+        .doc-footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            body {
+                padding: 12px 8px;
+            }
+            .document-container {
+                padding: 24px 16px;
+            }
+            .doc-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="document-container">
+        
+        <!-- Header -->
+        <header class="doc-header">
+            <h1 class="doc-title">FIND THE GATEWAY PROBLEM</h1>
+            <p class="doc-subtitle">(to start your project)</p>
+        </header>
+
+        <!-- User Inputs Section -->
+        <section>
+            <h2 class="section-heading">Dynamic Input Fields</h2>
+            
+            <div class="input-group">
+                <div class="input-label-row">
+                    <label class="input-label" for="inputProduct">[Product]</label>
+                    <button class="reset-btn" onclick="resetField('inputProduct')">Reset Field</button>
+                </div>
+                <textarea id="inputProduct" class="doc-input" placeholder="Enter product name..." oninput="updatePrompts()"></textarea>
+            </div>
+
+            <div class="input-group">
+                <div class="input-label-row">
+                    <label class="input-label" for="inputProductDesc">[Product DESCRIPTION]</label>
+                    <button class="reset-btn" onclick="resetField('inputProductDesc')">Reset Field</button>
+                </div>
+                <textarea id="inputProductDesc" class="doc-input" placeholder="Enter product description..." oninput="updatePrompts()"></textarea>
+            </div>
+
+            <div class="input-group">
+                <div class="input-label-row">
+                    <label class="input-label" for="inputTargetProblem">[Target PROBLEM]</label>
+                    <button class="reset-btn" onclick="resetField('inputTargetProblem')">Reset Field</button>
+                </div>
+                <textarea id="inputTargetProblem" class="doc-input" placeholder="Enter target problem..." oninput="updatePrompts()"></textarea>
+            </div>
+
+            <div class="input-group">
+                <div class="input-label-row">
+                    <label class="input-label" for="inputFreeReportIdea">[free report IDEA]</label>
+                    <button class="reset-btn" onclick="resetField('inputFreeReportIdea')">Reset Field</button>
+                </div>
+                <textarea id="inputFreeReportIdea" class="doc-input" placeholder="Enter free report idea..." oninput="updatePrompts()"></textarea>
+            </div>
+        </section>
+
+        <!-- Generated Output Section -->
+        <section>
+            <h2 class="section-heading">Generated Output Prompts</h2>
+            
+            <!-- Prompt 1 Box -->
+            <div class="output-card">
+                <div class="output-header">
+                    <span class="output-title">Find My Gateway Problem</span>
+                </div>
+                <textarea id="promptOutput1" class="prompt-preview" readonly></textarea>
+                <button class="copy-btn" onclick="copyPrompt('promptOutput1', this)">Copy to Clipboard</button>
+            </div>
+
+            <!-- Prompt 2 Box -->
+            <div class="output-card">
+                <div class="output-header">
+                    <span class="output-title">Test My Gateway Problem</span>
+                </div>
+                <textarea id="promptOutput2" class="prompt-preview" readonly></textarea>
+                <button class="copy-btn" onclick="copyPrompt('promptOutput2', this)">Copy to Clipboard</button>
+            </div>
+
+            <!-- Prompt 3 Box -->
+            <div class="output-card">
+                <div class="output-header">
+                    <span class="output-title">Turn A Broad Idea Into A Gateway Problem</span>
+                </div>
+                <textarea id="promptOutput3" class="prompt-preview" readonly></textarea>
+                <button class="copy-btn" onclick="copyPrompt('promptOutput3', this)">Copy to Clipboard</button>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="doc-footer">
+            Copyright &copy; <script>document.write(new Date().getFullYear())</script> Siva Prasad Mukherjee. All Rights Reserved.
+        </footer>
+
+    </div>
+
+    <script>
+        // Prompt Templates
+        const template1 = `My product is:
+[Product]
+{PRODUCT}
+
+From the problems someone experiences before needing this product, identify 10 possible Gateway Problems.
+A Gateway Problem should:
+Be specific 
+Matter to my ideal customer 
+Be small enough to address in a short report 
+Give the reader a useful result 
+Naturally lead towards the bigger problem my paid product solves 
+Rank the 10 ideas from strongest to weakest and explain why.`;
+
+        const template2 = `I'm considering creating a free report around this Gateway Problem:
+[Target PROBLEM]
+{TARGET_PROBLEM}
+
+My paid product is:
+[Product DESCRIPTION]
+{PRODUCT_DESC}
+
+Analyse whether this is a good Gateway Problem.
+Tell me:
+Who it would attract 
+Why they would want it 
+Whether those people are likely buyers of my paid product 
+What the report could help them achieve 
+What problem they are likely to face next 
+How naturally that next problem leads to my paid product 
+Give it a Gateway Score out of 100.`;
+
+        const template3 = `My current free report idea is:
+[free report IDEA]
+{FREE_REPORT_IDEA}
+
+My paid product is:
+[Product DESCRIPTION]
+{PRODUCT_DESC}
+
+The idea may be too broad or generic.
+Generate 10 narrower versions designed specifically to attract people likely to need my paid product next.`;
+
+        // Function to update all prompt outputs in real-time
+        function updatePrompts() {
+            const product = document.getElementById('inputProduct').value;
+            const productDesc = document.getElementById('inputProductDesc').value;
+            const targetProblem = document.getElementById('inputTargetProblem').value;
+            const freeReportIdea = document.getElementById('inputFreeReportIdea').value;
+
+            document.getElementById('promptOutput1').value = template1
+                .replace('{PRODUCT}', product);
+
+            document.getElementById('promptOutput2').value = template2
+                .replace('{TARGET_PROBLEM}', targetProblem)
+                .replace('{PRODUCT_DESC}', productDesc);
+
+            document.getElementById('promptOutput3').value = template3
+                .replace('{FREE_REPORT_IDEA}', freeReportIdea)
+                .replace('{PRODUCT_DESC}', productDesc);
+        }
+
+        // Reset individual field and refresh prompt boxes
+        function resetField(fieldId) {
+            document.getElementById(fieldId).value = '';
+            updatePrompts();
+        }
+
+        // Copy functionality with visual feedback
+        function copyPrompt(elementId, btn) {
+            const outputBox = document.getElementById(elementId);
+
+            outputBox.select();
+            outputBox.setSelectionRange(0, 99999);
+
+            try {
+                document.execCommand('copy');
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Copied!';
+                btn.classList.add('copied');
+
+                window.getSelection().removeAllRanges();
+
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+            }
+        }
+
+        // Initialize prompts on page load
+        window.onload = updatePrompts;
+    </script>
+</body>
+</html>
